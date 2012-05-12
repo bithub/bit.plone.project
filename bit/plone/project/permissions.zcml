@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+  <permission
+      id="bit.plone.project.AddProject"
+      title="bit.plone.project: Add project"
+      />
+
+  <permission
+      id="bit.plone.project.AddProjectContacts"
+      title="bit.plone.project: Add project contacts"
+      />
+
+</configure>

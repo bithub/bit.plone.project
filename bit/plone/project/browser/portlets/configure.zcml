@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"	
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="bit.plone.project"
+    >
+  <plone:portlet
+      name="portlets.ProjectContacts"
+      interface="bit.plone.project.browser.interfaces.IProjectContactsPortlet"
+      assignment=".portlet_project_contacts.Assignment"
+      renderer=".portlet_project_contacts.Renderer"
+      addview=".portlet_project_contacts.AddForm"
+      />
+</configure>

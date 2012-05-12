@@ -1,0 +1,22 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           i18n_domain="trinity.archive.content"
+           >
+
+  <include package="bit.plone.atomic" />
+  
+  <adapter 
+     provides="bit.plone.atomic.interfaces.IPageLayout"
+     factory=".project_info_atoms.ProjectInfoPageLayout"
+     />    
+  <adapter 
+      factory=".project_info_atoms.ProjectInfoAtomicRetriever"
+      provides="plone.portlets.interfaces.IPortletRetriever"
+      />    
+  <adapter 
+      factory=".project_info_atoms.projectInfoAssignmentMappingAdapter" />
+
+</configure>
+

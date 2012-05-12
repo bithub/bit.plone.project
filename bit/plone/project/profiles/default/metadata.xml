@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<metadata>
+  <dependencies>
+    <dependency>profile-tca.web.theme:default</dependency>
+<!--   <dependency>profile-tca.booking.system:default</dependency> no idea what this should be, but it isn't working (dc)
+    <dependency>profile-trinity.account.people:default</dependency> -->
+  </dependencies>
+</metadata>

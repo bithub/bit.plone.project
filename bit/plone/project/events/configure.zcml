@@ -1,0 +1,20 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser"
+	   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+	   i18n_domain="trinity.community.archive"
+	   >
+
+  <subscriber
+      for="Products.Archetypes.interfaces.base.IBaseObject
+	   zope.lifecycleevent.ObjectAddedEvent"
+      handler=".project_events.add_project"
+      />
+
+  <subscriber
+      for="tca.web.site.subtypes.interfaces.IProjectSubtype
+	   Products.Archetypes.interfaces.IObjectInitializedEvent"
+      handler=".project_events.add_project_folders"
+      />
+
+</configure>

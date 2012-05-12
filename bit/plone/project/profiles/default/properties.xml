@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<site>
+ <property name="title">Trinity Services</property>
+ <property name="description">Trinity Services, Trinity Community Arts Centre, Bristol UK</property>
+ <property name="default_page" type="string">home-page</property>
+ <property name="email_from_address"
+    type="string">info@3ca.org.uk</property>
+ <property name="email_from_name"
+    type="string">Trinity Community Arts</property>
+ <property name="validate_email" type="boolean">False</property>
+ <property name="default_charset" type="string">utf-8</property>
+ <property name="enable_permalink" type="boolean">True</property>
+
+</site>

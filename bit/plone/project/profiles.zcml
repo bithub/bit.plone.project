@@ -1,0 +1,17 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser"
+	   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+	   i18n_domain='3ca'
+	   >
+
+  <genericsetup:registerProfile
+      name="default"
+      title="bit.plone.project"
+      directory="profiles/default"
+      description="Extension profile for Trinity"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      for="Products.CMFPlone.interfaces.siteroot.ISiteRoot"
+      />
+
+</configure>

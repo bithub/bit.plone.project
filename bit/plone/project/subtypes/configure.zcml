@@ -1,0 +1,64 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser"
+	   xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+	   i18n_domain="trinity.project.structure"
+	   >
+  <include package="bit.plone.subtype" />
+  <include package="archetypes.schemaextender" />
+
+  <utility
+     name="bit.plone.project.Project"
+     factory=".projects.ProjectSubtype"
+     />
+
+  <adapter
+      factory=".projects.Project"
+      for=".interfaces.IProjectSubtype"
+      />
+
+  <adapter
+      factory=".projects.ProjectContacts"
+      for=".interfaces.IProjectSubtype"
+      />
+
+  <utility
+     name="bit.plone.project.ProjectContacts"
+     factory=".projects.ProjectContactsSubtype"
+     />
+
+  <utility
+     name="bit.plone.project.ProjectEvents"
+     factory=".projects.ProjectEventsSubtype"
+     />
+
+  <utility
+     name="bit.plone.project.ProjectLinks"
+     factory=".projects.ProjectLinksSubtype"
+     />
+
+
+  <utility
+     name="bit.plone.project.ProjectMedia"
+     factory=".projects.ProjectMediaSubtype"
+     />
+
+
+  <utility
+     name="bit.plone.project.ProjectNews"
+     factory=".projects.ProjectNewsSubtype"
+     />
+
+  <utility
+     name="bit.plone.project.ProjectInfo"
+     factory=".projects.ProjectInfoSubtype"
+     />
+
+  <utility
+     name="bit.plone.project.ProjectsFolder"
+     factory=".projects.ProjectsFolderSubtype"
+     />
+
+
+</configure>
+

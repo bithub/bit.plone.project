@@ -12,7 +12,7 @@
       />
 
   <subscriber
-      for="tca.web.site.subtypes.interfaces.IProjectSubtype
+      for="bit.plone.project.subtypes.interfaces.IProjectSubtype
 	   Products.Archetypes.interfaces.IObjectInitializedEvent"
       handler=".project_events.add_project_folders"
       />

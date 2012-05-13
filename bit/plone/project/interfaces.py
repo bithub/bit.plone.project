@@ -54,9 +54,6 @@ class IProjectInfo(I):
     def get_emails(self):
         pass
 
-    def get_info(self):
-        pass
-
 
 class IProjectMedia(I):
 
@@ -69,9 +66,6 @@ class IProjectMedia(I):
     def get_emails(self):
         pass
 
-    def get_media(self):
-        pass
-
 
 class IProjectLinks(I):
 
@@ -82,9 +76,6 @@ class IProjectLinks(I):
         pass
 
     def get_emails(self):
-        pass
-
-    def get_links(self):
         pass
 
 

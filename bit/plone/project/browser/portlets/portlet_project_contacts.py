@@ -1,4 +1,3 @@
-from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 from zope.formlib import form
 
@@ -23,7 +22,7 @@ class Renderer(base.Renderer):
     def __init__(self, context, request, view, manager, data):
         base.Renderer.__init__(self, context, request, view, manager, data)
         self.updated = False
-    
+
     @property
     def project_contacts(self):
         return IProjectContacts(self.context.aq_inner.aq_parent)

@@ -10,4 +10,11 @@
   <include package=".atomic" />
   <include package=".portlets" />
 
+  <browser:page
+      name="create_project_folders"
+      for="bit.plone.project.subtypes.interfaces.IProjectSubtype"
+      class=".projects.ProjectView"
+      attribute="create_project_folders"
+      permission="cmf.ManagePortal"
+      />
 </configure>

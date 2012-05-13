@@ -19,6 +19,7 @@ from bit.plone.atomic.adapters import PageLayout
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
 from bit.plone.project.browser.portlets import portlet_project_contacts
 
+
 class ProjectInfoPageLayout(PageLayout):
     adapts(IProjectInfoSubtype)
 
@@ -48,10 +49,10 @@ class ProjectInfoAtoms(FixedAtoms):
 
         fraglet_path = '/'.join(getToolByName(
                 self.context, 'portal_url').getRelativeContentPath(
-                self.context.aq_inner.aq_parent))            
+                self.context.aq_inner.aq_parent))
         yield self.atomic(
             'project-contacts',
-            portlet_project_contacts.Assignment()           
+            portlet_project_contacts.Assignment()
             )
         yield self.atomic(
             'project-listing',

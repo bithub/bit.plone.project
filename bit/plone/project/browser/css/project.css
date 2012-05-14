@@ -1,0 +1,49 @@
+
+.project-info
+{
+width: 50%;
+float: left;
+ }
+
+
+.project-info .email
+{ 
+background: url(/mail_icon.png) no-repeat;
+padding-left: 16px
+ }
+
+
+.project-info .phone
+{ 
+background: url(/phone_icon.png) no-repeat;
+padding-left: 16px
+ }
+
+
+.project-contacts
+{ 
+width: 50%;
+float: left;
+ }
+
+.project-contacts ul li,
+.project-urls ul li
+{ 
+list-style: none;
+ }
+
+.project-contacts .person
+{  
+background: url(/trinity-person.png) no-repeat;
+padding-left: 16px
+ }
+
+.project-urls
+{  
+clear: both;
+  }
+.project-urls .url
+{  
+background: url(/link_icon.png) no-repeat;
+padding-left: 16px
+ }

@@ -6,6 +6,9 @@ class IProject(I):
     def add_contacts_folder(self):
         pass
 
+    def add_partners_folder(self):
+        pass
+
     def get_project_status(self):
         pass
 
@@ -73,6 +76,18 @@ class IProjectLinks(I):
         pass
 
     def get_links(self):
+        pass
+
+    def get_emails(self):
+        pass
+
+
+class IProjectPartners(I):
+
+    def add_contact(self):
+        pass
+
+    def get_partners(self):
         pass
 
     def get_emails(self):

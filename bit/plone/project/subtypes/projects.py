@@ -2,16 +2,106 @@ from zope import interface
 from zope.interface import implements
 from zope.component import getUtility
 
+from archetypes.schemaextender.interfaces import ISchemaExtender
+from archetypes.schemaextender.field import ExtensionField
+
+from Products.CMFCore.utils import getToolByName
+from Products.Archetypes import public as atapi
+
 from p4a.subtyper import ISubtyper, interfaces as stifaces
 
 from bit.plone.project.interfaces\
     import IProject, IProjectsFolder, IProjectContacts, IProjectInfo,\
-    IProjectNews, IProjectLinks, IProjectEvents, IProjectMedia
+    IProjectNews, IProjectLinks, IProjectEvents, IProjectMedia,\
+    IProjectPartners
 
 from bit.plone.project.subtypes.interfaces\
     import IProjectSubtype, IProjectContactsSubtype, IProjectInfoSubtype,\
     IProjectsFolderSubtype, IProjectNewsSubtype, IProjectLinksSubtype,\
-    IProjectEventsSubtype, IProjectMediaSubtype
+    IProjectEventsSubtype, IProjectMediaSubtype, IProjectPartnersSubtype
+
+
+class ExStringField(ExtensionField, atapi.StringField):
+    """A trivial field."""
+
+
+class ExLinesField(ExtensionField, atapi.LinesField):
+    """A trivial field."""
+
+project_fields =[
+    ExStringField(
+        "project_email",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        widget=atapi.StringWidget(
+            label='Project Email',
+            label_msgid='label_project_email',
+            description="Please enter the primary "\
+                + "contact email for this project",
+            description_msgid='help_project_email',
+            i18n_domain='plone',
+            ),
+        ),
+    ExStringField(
+        "project_url",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        widget=atapi.StringWidget(
+            label='Project URL',
+            label_msgid='label_project_url',
+            description="Please enter the primary "\
+                + "URL for this project, leave blank to use this URL",
+            description_msgid='help_project_url',
+            i18n_domain='plone',
+            ),
+        ),
+    ExLinesField(
+        "project_features",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        widget=atapi.LinesWidget(
+            label='Project features',
+            label_msgid='label_project_features',
+            description="Please enter the paths "\
+                + "to featured content for this project",
+            description_msgid='help_project_features',
+            i18n_domain='plone',
+            ),
+        ),
+    ExLinesField(
+        "project_contacts",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        widget=atapi.LinesWidget(
+            label='Project Contacts',
+            label_msgid='label_project_contacts',
+            description="Please enter the user ids "\
+                + "of the contacts for this project",
+            description_msgid='help_project_contacts',
+            i18n_domain='plone',
+            ),
+        )
+    ]
+
+
+class ProjectExtender(object):
+    implements(ISchemaExtender)
+    fields = project_fields
+
+    def __init__(self, context):
+        self.context = context
+
+    def getFields(self):
+        return self.fields
+
 
 
 class ProjectsFolderSubtype(object):
@@ -49,6 +139,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['contacts'],
                 'bit.plone.project.ProjectContacts')
+        self.context['contacts'].setTitle('Contacts')
 
     def add_news_folder(self):
         if not 'news' in self.context:
@@ -58,6 +149,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['news'],
                 'bit.plone.project.ProjectNews')
+        self.context['news'].setTitle('News')
 
     def add_links_folder(self):
         if not 'links' in self.context:
@@ -67,6 +159,17 @@ class Project(object):
             subtyper.change_type(
                 self.context['links'],
                 'bit.plone.project.ProjectLinks')
+        self.context['links'].setTitle('Links')
+
+    def add_partners_folder(self):
+        if not 'partners' in self.context:
+            self.context.invokeFactory('Links')
+        if not IProjectPartners(self.context['partners'], None):
+            subtyper = getUtility(ISubtyper)
+            subtyper.change_type(
+                self.context['partners'],
+                'bit.plone.project.ProjectPartners')
+        self.context['partners'].setTitle('Partners')
 
     def add_events_folder(self):
         if not 'events' in self.context:
@@ -76,6 +179,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['events'],
                 'bit.plone.project.ProjectEvents')
+        self.context['partners'].setTitle('Events')
 
     def add_info_folder(self):
         if not 'info' in self.context:
@@ -85,6 +189,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['info'],
                 'bit.plone.project.ProjectInfo')
+        self.context['info'].setTitle('Info')
 
     def add_media_folder(self):
         if not 'media' in self.context:
@@ -94,7 +199,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['media'],
                 'bit.plone.project.ProjectMedia')
-
+        self.context['media'].setTitle('Media')
 
 class ProjectContacts(object):
     implements(IProjectContacts)
@@ -103,19 +208,31 @@ class ProjectContacts(object):
         self.context = context
 
     def get_project_email(self):
-        return 'project@3ca.org.uk'
+        return self.context.Schema()['project_email'].get(self.context)
 
     def get_project_url(self):
-        return self.context.absolute_url()
+        project_url = self.context.Schema(
+            )['project_url'].get(self.context)
+        return project_url or self.context.absolute_url()
 
     def get_project_contacts(self):
-        links = [x.getRemoteUrl() for x
-                 in self.context['contacts'].contentValues()
-                 if x.portal_type == 'Link'
-                 and not x.getRemoteUrl().startswith('http://')
-                 and not x.getRemoteUrl().startswith('https://')
-                 and '@' in x.getRemoteUrl()]
-        return links
+        contacts = []
+
+        membership = getToolByName(self.context, 'portal_membership')
+
+        # this is trinity specific...
+        for member in self.context.Schema()['project_contacts'].get(self.context): 
+            name = membership.getMemberById(member).getFullname()
+            contacts.append('%s <%s@3ca.org.uk>' % (name, member))
+
+        if 'contacts' in self.context:
+            contacts += ['%s <%s>' % (x.Title, x.getRemoteUrl()) for x
+                         in self.context['contacts'].contentValues()
+                         if x.portal_type == 'Link'
+                         and not x.getRemoteUrl().startswith('http://')
+                         and not x.getRemoteUrl().startswith('https://')
+                         and '@' in x.getRemoteUrl()]
+        return contacts
 
     def get_project_links(self):
         links = [x.getRemoteUrl() for x
@@ -163,6 +280,16 @@ class ProjectLinks(object):
         self.context = context
 
     def get_links(self):
+        pass
+
+
+class ProjectPartners(object):
+    implements(IProjectPartners)
+
+    def __init__(self, context):
+        self.context = context
+
+    def get_partners(self):
         pass
 
 
@@ -268,6 +395,23 @@ class ProjectLinksSubtype(object):
     default_view = '@@atomic-view'
     allowed_types = ['Link']
     permission = 'bit.plone.project.AddProjectLinks'
+
+
+class ProjectPartnersSubtype(object):
+    """A descriptor for the ultra doc subtype.
+    >>> descriptor = UltraDocDescriptor()
+    >>> descriptor.title
+    u'Project'
+    """
+    interface.implements(stifaces.IPortalTypedFolderishDescriptor)
+    title = u'Project partners'
+    description = u'Project partners, URLs etc'
+    type_interface = IProjectPartnersSubtype
+    for_portal_type = 'Folder'
+    icon = 'trinity-favicon-tiny.png'
+    default_view = '@@atomic-view'
+    allowed_types = ['Link']
+    permission = 'bit.plone.project.AddProjectPartners'
 
 
 class ProjectInfoSubtype(object):

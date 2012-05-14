@@ -12,28 +12,29 @@
 	</a>
       </dt>
       <dd>
-	<dl>
-	  <dt>Project email</dt>
-	  <dd class="contact-info">
-	    <span tal:content="view/get_email" />
-	  </dd>
-	  <dt>Project URL</dt>
-	  <dd class="contact-info">
-	    <span tal:content="view/get_url" />
-	  </dd>
-	  <dt>Project Contacts</dt>
-	  <dd class="contact-info">
+	<div class="project-info">
+	  <div tal:content="view/get_email" class="email" />
+	  <div tal:content="view/get_email" class="phone" />
+	</div>
+
+	<div class="project-contacts">
+	  <ul>
 	    <tal:loop repeat="contact view/get_contacts">
-	      <span tal:content="contact" />
+	      <li tal:content="contact" class="person" />
 	    </tal:loop>
-	  </dd>
-	  <dt>Project Links</dt>
-	  <dd class="contact-info">
+	  </ul>
+	</div>
+
+	<div class="project-urls">
+	  <ul>
 	    <tal:loop repeat="link view/get_links">
-	      <span tal:content="link" />
+	      <li class="url">
+		<a tal:attributes="href link"
+		   tal:content="link" />
+	      </li>
 	    </tal:loop>
-	  </dd>
-	</dl>
+	  </ul>
+	</div>
       </dd>
     </dl>
     <div class="visualClear"><!--is that clear?--></div>

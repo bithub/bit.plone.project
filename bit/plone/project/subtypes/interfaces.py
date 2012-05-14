@@ -29,6 +29,11 @@ class IProjectLinksSubtype(ISubtyped):
 alsoProvides(IProjectLinksSubtype, IContentType)
 
 
+class IProjectPartnersSubtype(ISubtyped):
+    """An project"""
+alsoProvides(IProjectPartnersSubtype, IContentType)
+
+
 class IProjectMediaSubtype(ISubtyped):
     """An project"""
 alsoProvides(IProjectMediaSubtype, IContentType)

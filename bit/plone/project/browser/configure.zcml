@@ -17,4 +17,10 @@
       attribute="create_project_folders"
       permission="cmf.ManagePortal"
       />
+
+  <browser:resource
+      name="bit-plone-project.css"
+      file="css/project.css"
+      />
+
 </configure>

@@ -1,3 +1,5 @@
+import os
+
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
 
@@ -14,6 +16,9 @@ from bit.plone.atomic.browser.forms.retriever\
 
 from bit.plone.fraglets.browser.portlets.portlet_fraglet\
     import Assignment as fraglet
+from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
+    import Assignment as multi_fraglet
+
 from bit.plone.atomic.adapters import PageLayout
 
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
@@ -44,33 +49,85 @@ class ProjectInfoPageLayout(PageLayout):
 
 class ProjectInfoAtoms(FixedAtoms):
 
+    def _project(self):
+        return self.context.aq_inner.aq_parent
+    
+    def _project_path(self, path=''):
+        return '/'.join(list(
+                getToolByName(
+                    self.context, 'portal_url'
+                    ).getRelativeContentPath(
+                    self._project()
+                    )) + path.split('/'))
+
+    @property
+    def _left(self):
+        yield self.atomic(
+            'project-summary',
+            fraglet(fragletPath=self._project_path(),
+                    fragletShowTitle=False,
+                    fragletShowDescription=True,
+                    fragletShowSummary=True,
+                    fragletShowThumbnail=True,
+                    listingMaxItems=-1))
+        features = self._project().Schema(
+            )['project_features'].get(self._project())
+        for feature_path in features:
+            yield self.atomic(
+                'project-%s' % os.path.basename(feature_path),
+                fraglet(fragletPath=feature_path,
+                        fragletShowTitle=True,
+                        fragletShowDescription=True,
+                        fragletShowSummary=True,
+                        fragletShowThumbnail=True,
+                        listingMaxItems=-1))
+
     @property
     def _right(self):
-
-        fraglet_path = '/'.join(getToolByName(
-                self.context, 'portal_url').getRelativeContentPath(
-                self.context.aq_inner.aq_parent))
         yield self.atomic(
             'project-contacts',
             portlet_project_contacts.Assignment()
             )
-        yield self.atomic(
-            'project-listing',
-            fraglet(fragletPath=fraglet_path,
-                    fragletShowTitle=True,
-                    fragletShowDescription=True,
-                    fragletShowSummary=False,
-                    fragletShowThumbnail=False,
-                    fragletCssClass='overlayFragletItems fixedWidth',
-                    listingBatchResults=True,
-                    listingItemsPerPage=5,
-                    itemShowTitle=True,
-                    itemShowIcon=True,
-                    itemShowGraphic='thumb',
-                    itemShowSummary=True,
-                    itemShowDescription=True,
-                    itemShowDownloadLink=True))
+        frag_paths =  ['news', 'events', 'links']
 
+        yield self.atomic(
+            'project-info',
+            multi_fraglet(
+                    [(frag,
+                      dict(fragletPath=self._project_path(frag),
+                           fragletShowTitle=False,
+                           fragletShowDescription=False,
+                           fragletShowSummary=False,
+                           fragletShowThumbnail=False,
+                           fragletCssClass='overlayFragletItems',
+                           listingBatchResults=True,
+                           listingItemsPerPage=5,
+                           itemShowTitle=True,
+                           itemShowIcon=True,
+                           itemShowGraphic='tile',
+                           itemShowSummary=False,
+                           itemShowDescription=True,
+                           itemShowDownloadLink=True))
+                     for frag in frag_paths]))
+        
+        yield self.atomic(
+            'project-media',
+            fraglet(
+                fragletPath=self._project_path('media'),
+                fragletShowTitle=True,
+                fragletShowDescription=False,
+                fragletShowSummary=False,
+                fragletShowThumbnail=False,
+                fragletCssClass='overlayFragletItems',
+                listingBatchResults=True,
+                listingItemsPerPage=5,
+                itemShowTitle=True,
+                itemShowIcon=True,
+                itemShowGraphic='tile',
+                itemShowSummary=False,
+                itemLinkDirectly=False,
+                itemShowDescription=True,
+                itemShowDownloadLink=True))
 
 # should be able to get rid of this!
 @adapter(IProjectInfoSubtype, IPortletManager)

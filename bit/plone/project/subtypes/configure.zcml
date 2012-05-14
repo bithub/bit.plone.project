@@ -12,6 +12,11 @@
      factory=".projects.ProjectSubtype"
      />
 
+  <adapter 
+      for=".interfaces.IProjectSubtype"
+      factory=".projects.ProjectExtender"
+     />
+
   <adapter
       factory=".projects.Project"
       for=".interfaces.IProjectSubtype"

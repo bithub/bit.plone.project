@@ -19,3 +19,4 @@ def add_project_folders(obj, event):
     IProject(obj).add_links_folder()
     IProject(obj).add_media_folder()
     IProject(obj).add_info_folder()
+    IProject(obj).add_partners_folder()

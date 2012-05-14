@@ -42,6 +42,10 @@
      factory=".projects.ProjectLinksSubtype"
      />
 
+  <utility
+     name="bit.plone.project.ProjectPartners"
+     factory=".projects.ProjectPartnersSubtype"
+     />
 
   <utility
      name="bit.plone.project.ProjectMedia"

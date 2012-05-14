@@ -11,3 +11,4 @@ class ProjectView(FiveView):
         IProject(self.context).add_links_folder()
         IProject(self.context).add_media_folder()
         IProject(self.context).add_info_folder()
+        IProject(self.context).add_partners_folder()

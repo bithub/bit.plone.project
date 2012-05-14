@@ -163,7 +163,7 @@ class Project(object):
 
     def add_partners_folder(self):
         if not 'partners' in self.context:
-            self.context.invokeFactory('Links')
+            self.context.invokeFactory('Folder', 'partners')
         if not IProjectPartners(self.context['partners'], None):
             subtyper = getUtility(ISubtyper)
             subtyper.change_type(
@@ -179,7 +179,7 @@ class Project(object):
             subtyper.change_type(
                 self.context['events'],
                 'bit.plone.project.ProjectEvents')
-        self.context['partners'].setTitle('Events')
+        self.context['events'].setTitle('Events')
 
     def add_info_folder(self):
         if not 'info' in self.context:

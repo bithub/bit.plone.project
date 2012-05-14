@@ -12,29 +12,39 @@
 	</a>
       </dt>
       <dd>
-	<div class="project-info">
-	  <div tal:content="view/get_email" class="email" />
-	  <div tal:content="view/get_email" class="phone" />
-	</div>
-
-	<div class="project-contacts">
-	  <ul>
-	    <tal:loop repeat="contact view/get_contacts">
-	      <li tal:content="contact" class="person" />
-	    </tal:loop>
-	  </ul>
-	</div>
-
-	<div class="project-urls">
-	  <ul>
-	    <tal:loop repeat="link view/get_links">
-	      <li class="url">
-		<a tal:attributes="href link"
-		   tal:content="link" />
-	      </li>
-	    </tal:loop>
-	  </ul>
-	</div>
+	<dl class="enableFormTabbing">
+	  <dt class="fieldsetlegend-project-info">
+	    Project info
+	  </dt>
+	  <dd class="fieldset-project-info">
+	      <div class="project-info">
+		<div tal:content="view/get_email" class="email" />
+		<div tal:content="view/get_phone" class="phone" />
+	      </div>
+	      <div class="project-urls">
+		<ul>
+		  <tal:loop repeat="link view/get_links">
+		    <li class="url">
+		      <a tal:attributes="href link"
+			 tal:content="link" />
+		    </li>
+		  </tal:loop>
+		</ul>
+	      </div>	      
+	  </dd>
+	  <dt class="fieldsetlegend-project-people">
+	    People
+	  </dt>
+	  <dd class="fieldset-project-info">
+	    <div class="project-contacts">
+	      <ul>
+		<tal:loop repeat="contact view/get_contacts">
+		  <li tal:content="contact" class="person" />
+		</tal:loop>
+	      </ul>
+	    </div>
+	  </dd>
+	</dl>
       </dd>
     </dl>
     <div class="visualClear"><!--is that clear?--></div>

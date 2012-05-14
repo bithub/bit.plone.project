@@ -59,6 +59,21 @@ project_fields =[
             i18n_domain='plone',
             ),
         ),
+    ExStringField(
+        "project_phone",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        widget=atapi.StringWidget(
+            label='Project phone',
+            label_msgid='label_project_phone',
+            description="Please enter the primary "\
+                + "phone for this project, leave blank to use this phone",
+            description_msgid='help_project_phone',
+            i18n_domain='plone',
+            ),
+        ),
     ExLinesField(
         "project_features",
         default='',
@@ -209,6 +224,9 @@ class ProjectContacts(object):
 
     def get_project_email(self):
         return self.context.Schema()['project_email'].get(self.context)
+
+    def get_project_phone(self):
+        return self.context.Schema()['project_phone'].get(self.context)
 
     def get_project_url(self):
         project_url = self.context.Schema(

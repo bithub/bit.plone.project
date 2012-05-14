@@ -40,6 +40,9 @@ class Renderer(base.Renderer):
     def get_email(self):
         return self.project_contacts.get_project_email()
 
+    def get_phone(self):
+        return self.project_contacts.get_project_phone()
+
     def get_contacts(self):
         return self.project_contacts.get_project_contacts()
 

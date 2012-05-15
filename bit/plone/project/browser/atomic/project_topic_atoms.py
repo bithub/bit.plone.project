@@ -39,7 +39,7 @@ class ProjectsTopicPageLayout(PageLayout):
         return False
 
     def css_class(self):
-        return 'fixedWidth fatLeft'
+        return 'fixedWidth'
 
     def css_id(self):
         return ''

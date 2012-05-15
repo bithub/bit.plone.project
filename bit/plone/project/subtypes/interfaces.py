@@ -4,6 +4,12 @@ from zope.app.content.interfaces import IContentType
 from p4a.subtyper.interfaces import ISubtyped
 
 
+class IProjectsTopicSubtype(ISubtyped):
+    """An project"""
+alsoProvides(IProjectsTopicSubtype, IContentType)
+
+IProjectTopicSubtype = IProjectsTopicSubtype
+
 class IProjectSubtype(ISubtyped):
     """An project"""
 alsoProvides(IProjectSubtype, IContentType)

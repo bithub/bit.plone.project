@@ -11,13 +11,13 @@ from Products.Archetypes import public as atapi
 from p4a.subtyper import ISubtyper, interfaces as stifaces
 
 from bit.plone.project.interfaces\
-    import IProject, IProjectsFolder, IProjectContacts, IProjectInfo,\
+    import IProject, IProjectContacts, IProjectInfo,\
     IProjectNews, IProjectLinks, IProjectEvents, IProjectMedia,\
     IProjectPartners
 
 from bit.plone.project.subtypes.interfaces\
     import IProjectSubtype, IProjectContactsSubtype, IProjectInfoSubtype,\
-    IProjectsFolderSubtype, IProjectNewsSubtype, IProjectLinksSubtype,\
+    IProjectNewsSubtype, IProjectLinksSubtype,\
     IProjectEventsSubtype, IProjectMediaSubtype, IProjectPartnersSubtype
 
 
@@ -119,22 +119,6 @@ class ProjectExtender(object):
 
 
 
-class ProjectsFolderSubtype(object):
-    """A descriptor for the ultra doc subtype.
-    >>> descriptor = UltraDocDescriptor()
-    >>> descriptor.title
-    u'Projects folder'
-    """
-    interface.implements(stifaces.IPortalTypedFolderishDescriptor)
-    title = u'Projects folder'
-    description = u'A folder of projects'
-    type_interface = IProjectsFolderSubtype
-    for_portal_type = 'Folder'
-    icon = 'trinity-favicon-tiny.png'
-    default_view = 'info'
-    allowed_types = ['Topic', 'Folder']
-    also_provides = (IProjectsFolder, )
-    permission = 'cmf.ManagePortal'
 
 
 class Project(object):

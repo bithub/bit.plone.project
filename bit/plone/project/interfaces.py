@@ -1,6 +1,12 @@
 from zope.interface import Interface as I
 
 
+class IProjectsTopic(I):
+
+    def add_contacts_folder(self):
+        pass
+
+
 class IProject(I):
 
     def add_contacts_folder(self):

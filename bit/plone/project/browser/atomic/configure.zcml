@@ -18,5 +18,19 @@
   <adapter 
       factory=".project_info_atoms.projectInfoAssignmentMappingAdapter" />
 
+
+  <adapter 
+     provides="bit.plone.atomic.interfaces.IPageLayout"
+     factory=".project_topic_atoms.ProjectsTopicPageLayout"
+     />    
+  <adapter 
+      factory=".project_topic_atoms.ProjectsTopicAtomicRetriever"
+      provides="plone.portlets.interfaces.IPortletRetriever"
+      />    
+  <adapter 
+      factory=".project_topic_atoms.projectTopicAssignmentMappingAdapter" />
+
+
+
 </configure>
 

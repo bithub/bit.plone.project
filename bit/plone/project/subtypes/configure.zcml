@@ -7,6 +7,23 @@
   <include package="bit.plone.subtype" />
   <include package="archetypes.schemaextender" />
 
+
+  <utility
+     name="bit.plone.project.ProjectsTopic"
+     factory=".projects_topic.ProjectsTopicSubtype"
+     />
+
+  <adapter
+      factory=".projects_topic.ProjectsTopic"
+      for=".interfaces.IProjectsTopicSubtype"
+      />
+
+  <adapter
+      for="bit.plone.project.subtypes.interfaces.IProjectsTopicSubtype"
+      provides="bit.plone.fraglets.interfaces.IFragletResultsDelegation"
+      factory=".projects_topic.ProjectsTopicResultsDelegation"
+      />
+
   <utility
      name="bit.plone.project.Project"
      factory=".projects.ProjectSubtype"
@@ -65,9 +82,13 @@
 
   <utility
      name="bit.plone.project.ProjectsFolder"
-     factory=".projects.ProjectsFolderSubtype"
+     factory=".projects_folder.ProjectsFolderSubtype"
      />
 
+  <adapter
+      factory=".projects_folder.ProjectsFolder"
+      for=".interfaces.IProjectsFolderSubtype"
+      />
 
 </configure>
 

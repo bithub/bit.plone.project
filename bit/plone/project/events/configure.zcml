@@ -6,9 +6,15 @@
 	   >
 
   <subscriber
-      for="Products.Archetypes.interfaces.base.IBaseObject
+      for="Products.ATContentTypes.interfaces.IATFolder
 	   zope.lifecycleevent.ObjectAddedEvent"
       handler=".project_events.add_project"
+      />
+
+  <subscriber
+      for="Products.ATContentTypes.interfaces.IATTopic
+	   zope.lifecycleevent.ObjectAddedEvent"
+      handler=".project_events.add_project_topic"
       />
 
   <subscriber

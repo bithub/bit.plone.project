@@ -71,9 +71,8 @@ class ProjectsTopicAtoms(FixedAtoms):
                            fragletShowDescription=False,
                            fragletShowSummary=False,
                            fragletShowThumbnail=False,
-                           fragletCssClass='overlayFragletItems',
                            listingBatchResults=True,
-                           listingItemsPerPage=5,
+                           listingItemsPerPage=10,
                            itemShowTitle=True,
                            itemShowIcon=True,
                            itemShowGraphic='tile',
@@ -84,17 +83,46 @@ class ProjectsTopicAtoms(FixedAtoms):
 
     @property
     def _left(self):
-        yield self.atomic(
-            'projects',
-            fraglet(fragletPath=".",
-                    fragletShowTitle=False,
-                    fragletShowDescription=True,
-                    fragletShowSummary=True,
-                    fragletShowThumbnail=True,
-                    itemShowSummary=True,
-                    itemShowDescription=True,
-                    itemShowGraphic='mini',
-                    listingMaxItems=0))
+        featured_projects = IProjectsTopic(self.context).get_featured_projects()
+        if not featured_projects:
+            yield self.atomic(
+                'projects',
+                fraglet(fragletPath=".",
+                        fragletShowTitle=False,
+                        fragletShowDescription=True,
+                        fragletShowSummary=True,
+                        fragletShowThumbnail=True,
+                        itemShowSummary=True,
+                        itemShowDescription=True,
+                        itemShowGraphic='mini',
+                        listingMaxItems=0,
+                        listingBatchItems=3))
+        else:
+            projects = IProjectsTopic(self.context).get_projects_folder()
+            yield self.atomic(
+                'projects',
+                fraglet(fragletPath=".",
+                        fragletShowTitle=False,
+                        fragletShowDescription=True,
+                        fragletShowSummary=True,
+                        fragletShowThumbnail=True,
+                        itemShowSummary=True,
+                        itemShowDescription=True,
+                        itemShowGraphic='mini',
+                        listingMaxItems=-1))
+
+            for project in featured_projects:
+                yield self.atomic(
+                    'project-%s' % project,
+                    fraglet(fragletPath=self._project_path(project),
+                            fragletShowTitle=True,
+                            fragletShowDescription=True,
+                            fragletShowSummary=True,
+                            fragletShowThumbnail=True,
+                            itemShowSummary=True,
+                            itemShowDescription=True,
+                            itemShowGraphic='mini',
+                            listingMaxItems=-1))
 
 
 # should be able to get rid of this!

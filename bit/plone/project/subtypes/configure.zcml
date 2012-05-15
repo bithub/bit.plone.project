@@ -18,6 +18,11 @@
       for=".interfaces.IProjectsTopicSubtype"
       />
 
+  <adapter 
+      for=".interfaces.IProjectsTopicSubtype"
+      factory=".projects_topic.ProjectsTopicExtender"
+     />
+
   <adapter
       for="bit.plone.project.subtypes.interfaces.IProjectsTopicSubtype"
       provides="bit.plone.fraglets.interfaces.IFragletResultsDelegation"

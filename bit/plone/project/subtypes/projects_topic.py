@@ -1,15 +1,7 @@
 from zope import interface
 from zope.interface import implements
-from zope.component import getUtility
 
-from archetypes.schemaextender.interfaces import ISchemaExtender
-from archetypes.schemaextender.field import ExtensionField
-
-from Products.CMFCore.utils import getToolByName
-from Products.Archetypes import public as atapi
-
-from p4a.subtyper import ISubtyper, interfaces as stifaces
-
+from p4a.subtyper import interfaces as stifaces
 
 from bit.plone.fraglets.interfaces import ICollectionResults
 from bit.plone.project.interfaces\
@@ -53,8 +45,9 @@ class ProjectsTopicResultsDelegation(object):
         self.context = context
 
     def getResults(self, **kwa):
-        kwa['object_provides'] = 'bit.plone.project.subtypes.interfaces.IProjectSubtype'
+        project_iface = 'bit.plone.project.subtypes.interfaces.IProjectSubtype'
         projects = IProjectsTopic(self.context).get_projects_folder()
+        kwa['object_provides'] = project_iface
         kwa['path'] = projects.get_path()
         max_items = kwa.get('max_items')
         if int(max_items or 0) == -1:

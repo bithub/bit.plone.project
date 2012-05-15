@@ -51,7 +51,7 @@ class ProjectInfoAtoms(FixedAtoms):
 
     def _project(self):
         return self.context.aq_inner.aq_parent
-    
+
     def _project_path(self, path=''):
         return '/'.join(list(
                 getToolByName(
@@ -88,7 +88,7 @@ class ProjectInfoAtoms(FixedAtoms):
             'project-contacts',
             portlet_project_contacts.Assignment()
             )
-        frag_paths =  ['news', 'events', 'links']
+        frag_paths = ['news', 'events', 'links']
 
         yield self.atomic(
             'project-info',
@@ -109,7 +109,7 @@ class ProjectInfoAtoms(FixedAtoms):
                            itemShowDescription=True,
                            itemShowDownloadLink=True))
                      for frag in frag_paths]))
-        
+
         yield self.atomic(
             'project-media',
             fraglet(
@@ -128,6 +128,7 @@ class ProjectInfoAtoms(FixedAtoms):
                 itemLinkDirectly=False,
                 itemShowDescription=True,
                 itemShowDownloadLink=True))
+
 
 # should be able to get rid of this!
 @adapter(IProjectInfoSubtype, IPortletManager)

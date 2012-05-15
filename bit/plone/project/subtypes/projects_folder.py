@@ -1,10 +1,9 @@
 from zope import interface
 from zope.interface import implements
-from zope.component import getUtility
 
 from Products.CMFCore.utils import getToolByName
 
-from p4a.subtyper import ISubtyper, interfaces as stifaces
+from p4a.subtyper import interfaces as stifaces
 
 from bit.plone.project.interfaces\
     import IProjectsFolder
@@ -30,7 +29,6 @@ class ProjectsFolder(object):
                 path=self.get_path())]
 
     def get_path(self):
-        portal_url = getToolByName(self.context, 'portal_url')
         return '/'.join(self.context.getPhysicalPath())
 
 

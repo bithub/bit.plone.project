@@ -28,7 +28,7 @@ class ExStringField(ExtensionField, atapi.StringField):
 class ExLinesField(ExtensionField, atapi.LinesField):
     """A trivial field."""
 
-project_fields =[
+project_fields = [
     ExStringField(
         "project_email",
         default='',
@@ -118,9 +118,6 @@ class ProjectExtender(object):
         return self.fields
 
 
-
-
-
 class Project(object):
     implements(IProject)
 
@@ -200,6 +197,7 @@ class Project(object):
                 'bit.plone.project.ProjectMedia')
         self.context['media'].setTitle('Media')
 
+
 class ProjectContacts(object):
     implements(IProjectContacts)
 
@@ -219,11 +217,11 @@ class ProjectContacts(object):
 
     def get_project_contacts(self):
         contacts = []
-
         membership = getToolByName(self.context, 'portal_membership')
 
         # this is trinity specific...
-        for member in self.context.Schema()['project_contacts'].get(self.context): 
+        for member in self.context.Schema(
+            )['project_contacts'].get(self.context):
             name = membership.getMemberById(member).getFullname()
             contacts.append('%s <%s@3ca.org.uk>' % (name, member))
 

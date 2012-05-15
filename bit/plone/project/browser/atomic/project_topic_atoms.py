@@ -1,5 +1,3 @@
-import os
-
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
 
@@ -23,7 +21,6 @@ from bit.plone.atomic.adapters import PageLayout
 
 from bit.plone.project.interfaces import IProjectsTopic
 from bit.plone.project.subtypes.interfaces import IProjectsTopicSubtype
-from bit.plone.project.browser.portlets import portlet_project_contacts
 
 
 class ProjectsTopicPageLayout(PageLayout):
@@ -49,7 +46,7 @@ class ProjectsTopicPageLayout(PageLayout):
 
 
 class ProjectsTopicAtoms(FixedAtoms):
-    
+
     def _project(self):
         return self.context.aq_inner.aq_parent
 

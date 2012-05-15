@@ -7,8 +7,8 @@ from p4a.subtyper.interfaces import ISubtyped
 class IProjectsTopicSubtype(ISubtyped):
     """An project"""
 alsoProvides(IProjectsTopicSubtype, IContentType)
-
 IProjectTopicSubtype = IProjectsTopicSubtype
+
 
 class IProjectSubtype(ISubtyped):
     """An project"""

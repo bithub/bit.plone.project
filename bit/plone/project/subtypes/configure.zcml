@@ -64,6 +64,18 @@
      factory=".projects.ProjectLinksSubtype"
      />
 
+  <adapter 
+      for=".interfaces.IProjectLinksSubtype"
+      factory=".projects.ProjectLinks"
+     />
+
+  <adapter
+      for="bit.plone.project.subtypes.interfaces.IProjectLinksSubtype"
+      provides="bit.plone.fraglets.interfaces.IFragletResultsDelegation"
+      factory=".projects.ProjectLinksResultsDelegation"
+      />
+
+
   <utility
      name="bit.plone.project.ProjectPartners"
      factory=".projects.ProjectPartnersSubtype"

@@ -10,11 +10,11 @@ from Products.Archetypes import public as atapi
 
 from p4a.subtyper import ISubtyper, interfaces as stifaces
 
+from bit.plone.fraglets.interfaces import IFolderResults
 from bit.plone.project.interfaces\
     import IProject, IProjectContacts, IProjectInfo,\
     IProjectNews, IProjectLinks, IProjectEvents, IProjectMedia,\
     IProjectPartners
-
 from bit.plone.project.subtypes.interfaces\
     import IProjectSubtype, IProjectContactsSubtype, IProjectInfoSubtype,\
     IProjectNewsSubtype, IProjectLinksSubtype,\
@@ -293,9 +293,23 @@ class ProjectLinks(object):
     def __init__(self, context):
         self.context = context
 
-    def get_links(self):
-        pass
+    def get_links(self, **kwa):
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        content_filter = {}
+        content_filter['path'] = dict(
+            query=self.get_path(),
+            depth=-1)
+        content_filter['portal_type'] = 'Link'
+        content_filter['sort_on'] = 'effective'
+        max_items = kwa.get('max_items')
+        if int(max_items or 0) == -1:
+            return []    
+        return IFolderResults(self.context).get_results(
+            contentFilter=content_filter,
+            **kwa)
 
+    def get_path(self):
+        return '/'.join(self.context.getPhysicalPath())
 
 class ProjectPartners(object):
     implements(IProjectPartners)
@@ -460,3 +474,12 @@ class ProjectMediaSubtype(object):
     default_view = '@@atomic-view'
     allowed_types = ['Link']
     permission = 'bit.plone.project.AddProjectMedia'
+
+
+class ProjectLinksResultsDelegation(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def getResults(self, **kwa):
+        return IProjectLinks(self.context).get_links(**kwa)

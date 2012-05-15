@@ -5,13 +5,7 @@
 
     <dl tal:attributes="id view/get_id;
 			class view/get_class;">
-      <dt class="portletTitle">
-	<a tal:attributes="href view/get_url">
-	  <h1 tal:content="view/get_title"
-	      class="documentFirstHeading" />
-	</a>
-      </dt>
-      <dd>
+      <dd class="project-info-content">
 	<dl class="enableFormTabbing">
 	  <dt class="fieldsetlegend-project-info">
 	    Project info

@@ -39,7 +39,7 @@ class ProjectsTopicPageLayout(PageLayout):
         return False
 
     def css_class(self):
-        return 'fancyRight fixedWidth'
+        return 'fixedWidth fatLeft'
 
     def css_id(self):
         return ''
@@ -71,6 +71,7 @@ class ProjectsTopicAtoms(FixedAtoms):
                            fragletShowDescription=False,
                            fragletShowSummary=False,
                            fragletShowThumbnail=False,
+                           fragletCssClass='tall-box',
                            listingBatchResults=True,
                            listingItemsPerPage=10,
                            itemShowTitle=True,
@@ -84,14 +85,27 @@ class ProjectsTopicAtoms(FixedAtoms):
     @property
     def _left(self):
         featured_projects = IProjectsTopic(self.context).get_featured_projects()
+
+        yield self.atomic(
+            'project',
+            fraglet(fragletPath=".",
+                    fragletShowTitle=True,
+                    fragletShowDescription=True,
+                    fragletShowSummary=True,
+                    fragletShowThumbnail=True,
+                    itemShowSummary=True,
+                    itemShowDescription=True,
+                    itemShowGraphic='mini',
+                    listingMaxItems=-1))
+
         if not featured_projects:
             yield self.atomic(
                 'projects',
                 fraglet(fragletPath=".",
                         fragletShowTitle=False,
-                        fragletShowDescription=True,
-                        fragletShowSummary=True,
-                        fragletShowThumbnail=True,
+                        fragletShowDescription=False,
+                        fragletShowSummary=False,
+                        fragletShowThumbnail=False,
                         itemShowSummary=True,
                         itemShowDescription=True,
                         itemShowGraphic='mini',
@@ -99,18 +113,6 @@ class ProjectsTopicAtoms(FixedAtoms):
                         listingBatchItems=3))
         else:
             projects = IProjectsTopic(self.context).get_projects_folder()
-            yield self.atomic(
-                'projects',
-                fraglet(fragletPath=".",
-                        fragletShowTitle=False,
-                        fragletShowDescription=True,
-                        fragletShowSummary=True,
-                        fragletShowThumbnail=True,
-                        itemShowSummary=True,
-                        itemShowDescription=True,
-                        itemShowGraphic='mini',
-                        listingMaxItems=-1))
-
             for project in featured_projects:
                 yield self.atomic(
                     'project-%s' % project,

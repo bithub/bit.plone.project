@@ -12,6 +12,72 @@ background: url(/mail_icon.png) no-repeat;
 padding-left: 16px
  }
 
+#content dd.project-info-content
+{ 
+  padding: 0 0 0 0;
+ }
+
+#content dd.project-info-content  dl.enableFormTabbing
+{ 
+  min-height: 7em;
+ }
+
+#content dd.project-info-content  dl.enableFormTabbing
+{ 
+  min-height: 7em;
+ }
+
+
+#content .atomicPage ul.formTabs
+{ 
+  margin: 0 5px 0 10px;
+  }
+
+#content .atomicPage dl.enableFormTabbing
+{ 
+  background: white;
+  border: solid #eee 1px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #efefef;
+  margin: 0 5px;
+  padding: 1em;
+ }
+
+#content .atomicPage li.formTab a.selected,
+#content .atomicPage li.formTab a:focus,
+#content .atomicPage li.formTab a:hover {
+    padding-top: 1px;
+    position: relative;
+    top: 1px;
+    opacity: 1;
+}
+
+#content .atomicPage li.formTab a
+{
+    line-height: 1.5em;
+    padding: 0 0.75em;
+    text-decoration: none;
+    border: none;
+  margin: 0 ;
+  background: White;
+  border-top: solid #eee 1px;
+  border-left: solid #eee 1px;
+  border-right: solid #eee 1px;
+
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  webkit-border-top-right-radius: 3px;
+  webkit-border-top-left-radius: 3px;
+  moz-border-radius-topleft: 3px;
+  moz-border-radius-topright: 3px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  webkit-border-bottom-right-radius: 0;
+  webkit-border-bottom-left-radius: 0;
+  moz-border-radius-bottomleft: 0;
+  moz-border-radius-bottomright: 0;
+  opacity: .7;
+}
 
 .project-info .phone
 { 
@@ -19,12 +85,6 @@ background: url(/phone_icon.png) no-repeat;
 padding-left: 16px
  }
 
-
-.project-contacts
-{ 
-width: 50%;
-float: left;
- }
 
 .project-contacts ul li,
 .project-urls ul li

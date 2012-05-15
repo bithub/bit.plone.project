@@ -41,7 +41,7 @@ class ProjectInfoPageLayout(PageLayout):
         return False
 
     def css_class(self):
-        return 'fancyRight fixedWidth'
+        return 'fixedWidth fatLeft'
 
     def css_id(self):
         return ''
@@ -65,7 +65,7 @@ class ProjectInfoAtoms(FixedAtoms):
         yield self.atomic(
             'project-summary',
             fraglet(fragletPath=self._project_path(),
-                    fragletShowTitle=False,
+                    fragletShowTitle=True,
                     fragletShowDescription=True,
                     fragletShowSummary=True,
                     fragletShowThumbnail=True,
@@ -99,7 +99,7 @@ class ProjectInfoAtoms(FixedAtoms):
                            fragletShowDescription=False,
                            fragletShowSummary=False,
                            fragletShowThumbnail=False,
-                           fragletCssClass='overlayFragletItems',
+                           fragletCssClass='overlayFragletItems medium-tall-box',
                            listingBatchResults=True,
                            listingItemsPerPage=5,
                            itemShowTitle=True,

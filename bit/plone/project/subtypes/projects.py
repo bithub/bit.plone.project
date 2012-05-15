@@ -127,6 +127,20 @@ class Project(object):
     def get_title(self):
         return self.context.Title()
 
+    def get_project_folders(self):
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        return [
+            x.getId for x
+            in portal_catalog.searchResults(
+                path={
+                    'query': self.get_path(),
+                    'depth': 1},
+                sort_on='getObjPositionInParent')
+            if not x.exclude_from_nav]
+
+    def get_path(self):
+        return '/'.join(self.context.getPhysicalPath())
+
     def add_contacts_folder(self):
         if not 'contacts' in self.context:
             self.context.invokeFactory('Folder', 'contacts')

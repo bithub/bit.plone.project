@@ -21,6 +21,7 @@ from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
 
 from bit.plone.atomic.adapters import PageLayout
 
+from bit.plone.project.interfaces import IProject
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
 from bit.plone.project.browser.portlets import portlet_project_contacts
 
@@ -48,6 +49,10 @@ class ProjectInfoPageLayout(PageLayout):
 
 
 class ProjectInfoAtoms(FixedAtoms):
+
+    @property
+    def project(self):
+        return IProject(self._project())
 
     def _project(self):
         return self.context.aq_inner.aq_parent
@@ -88,14 +93,15 @@ class ProjectInfoAtoms(FixedAtoms):
             'project-contacts',
             portlet_project_contacts.Assignment()
             )
-        frag_paths = ['news', 'events', 'links']
+        
+        frag_paths = self.project.get_project_folders()[:3]
 
         yield self.atomic(
             'project-info',
             multi_fraglet(
                     [(frag,
                       dict(fragletPath=self._project_path(frag),
-                           fragletShowTitle=False,
+                           fragletShowTitle=True,
                            fragletShowDescription=False,
                            fragletShowSummary=False,
                            fragletShowThumbnail=False,
@@ -108,7 +114,7 @@ class ProjectInfoAtoms(FixedAtoms):
                            itemShowSummary=False,
                            itemShowDescription=True,
                            itemShowDownloadLink=True))
-                     for frag in frag_paths]))
+                     for frag in reversed(frag_paths)]))
 
         yield self.atomic(
             'project-media',

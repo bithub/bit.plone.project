@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '0.0.15'
+version = '0.0.16'
 
 
 setup(name='bit.plone.project',

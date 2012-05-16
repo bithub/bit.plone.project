@@ -30,7 +30,7 @@ class ProjectInfoPageLayout(PageLayout):
     adapts(IProjectInfoSubtype)
 
     def show_title(self):
-        return False
+        return True
 
     def show_description(self):
         return False
@@ -70,7 +70,7 @@ class ProjectInfoAtoms(FixedAtoms):
         yield self.atomic(
             'project-summary',
             fraglet(fragletPath=self._project_path(),
-                    fragletShowTitle=True,
+                    fragletShowTitle=False,
                     fragletShowDescription=True,
                     fragletShowSummary=True,
                     fragletShowThumbnail=True,
@@ -94,7 +94,14 @@ class ProjectInfoAtoms(FixedAtoms):
             portlet_project_contacts.Assignment()
             )
         
-        frag_paths = self.project.get_project_folders()[:3]
+        frag_paths = []
+        excluded_folders = ['partners', 'media', 'info']
+        for folder in self.project.get_project_folders(non_empty=True):
+            if len(frag_paths) < 3:
+                if not folder in excluded_folders:
+                    frag_paths.append(folder)
+            else:
+                break
 
         yield self.atomic(
             'project-info',
@@ -116,42 +123,47 @@ class ProjectInfoAtoms(FixedAtoms):
                            itemShowDownloadLink=True))
                      for frag in reversed(frag_paths)]))
 
-        yield self.atomic(
-            'project-media',
-            fraglet(
-                fragletPath=self._project_path('media'),
-                fragletShowTitle=True,
-                fragletShowDescription=False,
-                fragletShowSummary=False,
-                fragletShowThumbnail=False,
-                fragletCssClass='overlayFragletItems',
-                listingBatchResults=True,
-                listingItemsPerPage=5,
-                itemShowTitle=True,
-                itemShowIcon=True,
-                itemShowGraphic='tile',
-                itemShowSummary=False,
-                itemLinkDirectly=False,
-                itemShowDescription=True,
-                itemShowDownloadLink=True))
+        media = self.project.get_project_folder('media')
+        if media and media.contentIds():
+            yield self.atomic(
+                'project-media',
+                fraglet(
+                    fragletPath=self._project_path('media'),
+                    fragletShowTitle=True,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    fragletCssClass='overlayFragletItems',
+                    listingBatchResults=True,
+                    listingItemsPerPage=5,
+                    itemShowTitle=True,
+                    itemShowIcon=True,
+                    itemShowGraphic='tile',
+                    itemShowSummary=False,
+                    itemLinkDirectly=False,
+                    itemShowDescription=True,
+                    itemShowDownloadLink=True))
 
-        yield self.atomic(
-            'project-partners',
-            fraglet(
-                fragletPath=self._project_path('partners'),
-                fragletShowTitle=True,
-                fragletShowDescription=False,
-                fragletShowSummary=False,
-                fragletShowThumbnail=False,
-                listingBatchResults=True,
-                listingItemsPerPage=5,
-                itemShowTitle=True,
-                itemShowIcon=True,
-                itemShowGraphic='tile',
-                itemShowSummary=False,
-                itemLinkDirectly=False,
-                itemShowDescription=True,
-                itemShowDownloadLink=True))
+        partners = self.project.get_project_folder('partners')
+        if partners and partners.contentIds():
+            yield self.atomic(
+                'project-partners',
+                fraglet(
+                    fragletPath=self._project_path('partners'),
+                    fragletShowTitle=False,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    fragletCssClass='floatedBoxes',
+                    listingBatchResults=True,
+                    listingItemsPerPage=5,
+                    itemShowTitle=False,
+                    itemShowIcon=False,
+                    itemShowGraphic='thumb',
+                    itemShowSummary=False,
+                    itemLinkDirectly=False,
+                    itemShowDescription=False))
+
 
 # should be able to get rid of this!
 @adapter(IProjectInfoSubtype, IPortletManager)

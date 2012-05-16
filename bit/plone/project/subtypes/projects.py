@@ -127,16 +127,39 @@ class Project(object):
     def get_title(self):
         return self.context.Title()
 
-    def get_project_folders(self):
+    def get_project_folder(self, folderid):
+        if hasattr(self.context, folderid):
+            # this should return an adapted folder...
+            return self.context[folderid]
+
+    def get_project_folders(self, non_empty=False):
         portal_catalog = getToolByName(self.context, 'portal_catalog')
-        return [
-            x.getId for x
+        catalog_results = portal_catalog.searchResults(
+            show_inactive=False,
+            show_all=False,
+            exclude_from_nav=False)
+        for folder in [
+            x for x
             in portal_catalog.searchResults(
+                is_folderish=True,
+                exclude_from_nav=False,
                 path={
                     'query': self.get_path(),
                     'depth': 1},
                 sort_on='getObjPositionInParent')
-            if not x.exclude_from_nav]
+            ]:           
+            if non_empty:
+                has_children = [
+                    x.getPath() for x
+                    in catalog_results
+                    if not x.getPath() == folder.getPath()
+                    and x.getPath().startswith(folder.getPath())
+                    and not '/' in x.getPath().split(
+                        folder.getPath())[1].lstrip('/')]
+                if has_children:
+                    yield folder.getId
+            else:
+                yield folder.getId
 
     def get_path(self):
         return '/'.join(self.context.getPhysicalPath())

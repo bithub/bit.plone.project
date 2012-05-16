@@ -102,7 +102,6 @@ class ProjectInfoAtoms(FixedAtoms):
                     frag_paths.append(folder)
             else:
                 break
-
         yield self.atomic(
             'project-info',
             multi_fraglet(
@@ -121,7 +120,7 @@ class ProjectInfoAtoms(FixedAtoms):
                            itemShowSummary=False,
                            itemShowDescription=True,
                            itemShowDownloadLink=True))
-                     for frag in reversed(frag_paths)]))
+                     for frag in frag_paths]))
 
         media = self.project.get_project_folder('media')
         if media and media.contentIds():

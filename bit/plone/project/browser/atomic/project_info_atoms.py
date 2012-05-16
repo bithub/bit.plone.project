@@ -135,6 +135,23 @@ class ProjectInfoAtoms(FixedAtoms):
                 itemShowDescription=True,
                 itemShowDownloadLink=True))
 
+        yield self.atomic(
+            'project-partners',
+            fraglet(
+                fragletPath=self._project_path('partners'),
+                fragletShowTitle=True,
+                fragletShowDescription=False,
+                fragletShowSummary=False,
+                fragletShowThumbnail=False,
+                listingBatchResults=True,
+                listingItemsPerPage=5,
+                itemShowTitle=True,
+                itemShowIcon=True,
+                itemShowGraphic='tile',
+                itemShowSummary=False,
+                itemLinkDirectly=False,
+                itemShowDescription=True,
+                itemShowDownloadLink=True))
 
 # should be able to get rid of this!
 @adapter(IProjectInfoSubtype, IPortletManager)

@@ -25,6 +25,7 @@ class ProjectsFolder(object):
         return [
             x.getId for x
             in portal_catalog.searchResults(
+                sort_on='sortable_title',
                 object_provides=topic_iface,
                 path=self.get_path())]
 

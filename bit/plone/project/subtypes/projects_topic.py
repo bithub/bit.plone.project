@@ -91,6 +91,7 @@ class ProjectsTopicResultsDelegation(object):
         projects = IProjectsTopic(self.context).get_projects_folder()
         kwa['object_provides'] = project_iface
         kwa['path'] = projects.get_path()
+        kwa['sort_on'] = 'sortable_title'
         max_items = kwa.get('max_items')
         if int(max_items or 0) == -1:
             return []

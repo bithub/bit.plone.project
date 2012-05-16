@@ -23,4 +23,9 @@
       file="css/project.css"
       />
 
+  <browser:resource
+      name="bit-plone-project.js"
+      file="js/project.js"
+      />
+
 </configure>

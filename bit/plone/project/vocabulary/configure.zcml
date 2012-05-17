@@ -1,0 +1,14 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:five="http://namespaces.zope.org/five"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+           i18n_domain="bit.plone.subtype"
+           >
+
+  <utility	       
+     component=".project_vocab.ProjectStatusVocabularyFactory"
+     name="bit.plone.project.vocabulary.ProjectStatus"
+     />
+
+</configure>
+

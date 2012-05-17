@@ -25,6 +25,10 @@ class ExStringField(ExtensionField, atapi.StringField):
     """A trivial field."""
 
 
+class ExTextField(ExtensionField, atapi.TextField):
+    """A trivial field."""
+
+
 class ExLinesField(ExtensionField, atapi.LinesField):
     """A trivial field."""
 
@@ -41,6 +45,24 @@ project_fields = [
             description="Please enter the primary "\
                 + "contact email for this project",
             description_msgid='help_project_email',
+            i18n_domain='plone',
+            ),
+        ),
+    ExTextField(
+        "project_address",
+        default='',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        default_content_type='text/plain',
+        default_output_type='text/plain',
+        allowable_content_types=('text/plain'),
+        widget=atapi.TextAreaWidget(
+            label='Project Address',
+            label_msgid='label_project_address',
+            description="Please enter the primary "\
+                + "contact address for this project",
+            description_msgid='help_project_address',
             i18n_domain='plone',
             ),
         ),
@@ -147,7 +169,7 @@ class Project(object):
                     'query': self.get_path(),
                     'depth': 1},
                 sort_on='getObjPositionInParent')
-            ]:           
+            ]:
             if non_empty:
                 has_children = [
                     x.getPath() for x
@@ -252,6 +274,11 @@ class ProjectContacts(object):
             )['project_url'].get(self.context)
         return project_url or self.context.absolute_url()
 
+    def get_project_address(self):
+        project_address = self.context.Schema(
+            )['project_address'].get(self.context)
+        return project_address
+
     def get_project_contacts(self):
         contacts = []
         membership = getToolByName(self.context, 'portal_membership')
@@ -326,7 +353,7 @@ class ProjectLinks(object):
         content_filter['sort_on'] = 'effective'
         max_items = kwa.get('max_items')
         if int(max_items or 0) == -1:
-            return []    
+            return []
         return IFolderResults(self.context).get_results(
             contentFilter=content_filter,
             **kwa)

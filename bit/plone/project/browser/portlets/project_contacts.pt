@@ -26,18 +26,32 @@
 		</ul>
 	      </div>	      
 	  </dd>
-	  <dt class="fieldsetlegend-project-people">
-	    People
-	  </dt>
-	  <dd class="fieldset-project-info">
-	    <div class="project-contacts">
-	      <ul>
-		<tal:loop repeat="contact view/get_contacts">
-		  <li tal:content="contact" class="person" />
+	  <tal:if condition="view/get_contacts">
+	    <dt class="fieldsetlegend-project-people">
+	      People
+	    </dt>
+	    <dd class="fieldset-project-people">
+	      <div class="project-contacts">
+		<ul>
+		  <tal:loop repeat="contact view/get_contacts">
+		    <li tal:content="contact" class="person" />
+		  </tal:loop>
+		</ul>
+	      </div>
+	    </dd>
+	  </tal:if>
+	  <tal:if condition="view/get_address">
+	    <dt class="fieldsetlegend-project-address">
+	      Address
+	    </dt>
+	    <dd class="fieldset-project-address">
+	      <div class="project-address">
+		<tal:loop repeat="line python:view.get_address().split('\n')">
+		  <div tal:content="line" class="person" />
 		</tal:loop>
-	      </ul>
-	    </div>
-	  </dd>
+	      </div>
+	    </dd>
+	  </tal:if>
 	</dl>
       </dd>
     </dl>

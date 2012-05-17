@@ -46,6 +46,9 @@ class Renderer(base.Renderer):
     def get_contacts(self):
         return self.project_contacts.get_project_contacts()
 
+    def get_address(self):
+        return self.project_contacts.get_project_address()
+
     def get_links(self):
         return self.project_contacts.get_project_links()
 

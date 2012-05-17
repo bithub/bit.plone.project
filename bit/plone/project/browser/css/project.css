@@ -6,6 +6,13 @@ float: left;
  }
 
 
+.project-info-content .status
+{
+  font-style: italic;
+  color: #777;
+ }
+
+
 .project-info .email
 { 
 background: url(/mail_icon.png) no-repeat;

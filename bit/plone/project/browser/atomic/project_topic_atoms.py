@@ -27,7 +27,7 @@ class ProjectsTopicPageLayout(PageLayout):
     adapts(IProjectsTopicSubtype)
 
     def show_title(self):
-        return False
+        return True
 
     def show_description(self):
         return False
@@ -89,7 +89,7 @@ class ProjectsTopicAtoms(FixedAtoms):
         yield self.atomic(
             'project',
             fraglet(fragletPath=".",
-                    fragletShowTitle=True,
+                    fragletShowTitle=False,
                     fragletShowDescription=True,
                     fragletShowSummary=True,
                     fragletShowThumbnail=True,

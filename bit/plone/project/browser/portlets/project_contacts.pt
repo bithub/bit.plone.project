@@ -11,11 +11,6 @@
 	    Project info
 	  </dt>
 	  <dd class="fieldset-project-info">
-	    <tal:if condition="view/get_status">
-	      <div  class="status">
-	      Status: <span tal:content="view/get_status" />
-	      </div>
-	    </tal:if>
 	    <div class="project-info">
 	      <div tal:content="view/get_email" class="email" />
 	      <div tal:content="view/get_phone" class="phone" />
@@ -29,7 +24,12 @@
 		  </li>
 		</tal:loop>
 	      </ul>
-	    </div>	      
+	    </div>
+	    <tal:if condition="view/get_status">
+	      <div  class="status">
+		<span tal:content="view/get_status" />
+	      </div>
+	    </tal:if>
 	  </dd>
 	  <tal:if condition="view/get_contacts">
 	    <dt class="fieldsetlegend-project-people">

@@ -35,7 +35,15 @@ class Renderer(base.Renderer):
         return True
 
     def get_status(self):
-        return self.project.get_project_status()
+        status = self.project.get_project_status()
+        STATUS = dict(
+            complete='This project is not currently running, '
+            + 'but please contact us if you would like to see it happen again',
+            occasional='This project is not currently running, '
+            + 'but drop us an email and we\'ll let you know next time it is')
+        
+        if status in STATUS:
+            return STATUS[status]
 
     def get_url(self):
         return self.project_contacts.get_project_url()

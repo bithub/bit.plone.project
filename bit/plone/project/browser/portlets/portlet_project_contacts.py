@@ -34,6 +34,9 @@ class Renderer(base.Renderer):
     def showPortlet(self):
         return True
 
+    def get_status(self):
+        return self.project.get_project_status()
+
     def get_url(self):
         return self.project_contacts.get_project_url()
 

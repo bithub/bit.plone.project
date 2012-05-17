@@ -82,6 +82,22 @@ project_fields = [
             ),
         ),
     ExStringField(
+        "project_status",
+        default='active',
+        mode='rw',
+        read_permission='zope.View',
+        write_permission='cmf.ModifyPortalContent',
+        vocabulary="bit.plone.project.vocabulary.ProjectStatus",
+        widget=atapi.SelectionWidget(
+            label='Project Status',
+            label_msgid='label_project_status',
+            description="Please enter the primary "\
+                + "STATUS for this project, leave blank to use this STATUS",
+            description_msgid='help_project_status',
+            i18n_domain='plone',
+            ),
+        ),
+    ExStringField(
         "project_phone",
         default='',
         mode='rw',
@@ -182,6 +198,11 @@ class Project(object):
                     yield folder.getId
             else:
                 yield folder.getId
+
+    def get_project_status(self):
+        project_status = self.context.Schema(
+            )['project_status'].get(self.context)
+        return project_status
 
     def get_path(self):
         return '/'.join(self.context.getPhysicalPath())

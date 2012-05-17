@@ -11,20 +11,25 @@
 	    Project info
 	  </dt>
 	  <dd class="fieldset-project-info">
-	      <div class="project-info">
-		<div tal:content="view/get_email" class="email" />
-		<div tal:content="view/get_phone" class="phone" />
+	    <tal:if condition="view/get_status">
+	      <div  class="status">
+	      Status: <span tal:content="view/get_status" />
 	      </div>
-	      <div class="project-urls">
-		<ul>
-		  <tal:loop repeat="link view/get_links">
-		    <li class="url">
-		      <a tal:attributes="href link"
-			 tal:content="link" />
-		    </li>
-		  </tal:loop>
-		</ul>
-	      </div>	      
+	    </tal:if>
+	    <div class="project-info">
+	      <div tal:content="view/get_email" class="email" />
+	      <div tal:content="view/get_phone" class="phone" />
+	    </div>
+	    <div class="project-urls">
+	      <ul>
+		<tal:loop repeat="link view/get_links">
+		  <li class="url">
+		    <a tal:attributes="href link"
+		       tal:content="link" />
+		  </li>
+		</tal:loop>
+	      </ul>
+	    </div>	      
 	  </dd>
 	  <tal:if condition="view/get_contacts">
 	    <dt class="fieldsetlegend-project-people">

@@ -18,6 +18,11 @@
       for=".interfaces.IProjectsTopicSubtype"
       />
 
+  <adapter
+      factory=".projects_topic.ProjectsFolderTopic"
+      for=".interfaces.IProjectsFolderSubtype"
+      />
+
   <adapter 
       for=".interfaces.IProjectsTopicSubtype"
       factory=".projects_topic.ProjectsTopicExtender"
@@ -106,6 +111,11 @@
       factory=".projects_folder.ProjectsFolder"
       for=".interfaces.IProjectsFolderSubtype"
       />
+
+  <adapter 
+      for=".interfaces.IProjectsFolderSubtype"
+      factory=".projects_folder.ProjectsFolderExtender"
+     />
 
 </configure>
 

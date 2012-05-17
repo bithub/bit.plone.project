@@ -57,7 +57,6 @@ class ProjectsTopicAtoms(FixedAtoms):
                     ).getRelativeContentPath(
                     self._project()
                     )) + path.split('/'))
-
     @property
     def _right(self):
         projects = IProjectsTopic(self.context).get_projects_folder()

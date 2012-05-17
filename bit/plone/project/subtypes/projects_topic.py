@@ -25,11 +25,22 @@ class ProjectsTopic(object):
     def get_title(self):
         return self.context.Title()
 
+    @property
+    def _projects_folder(self):
+        return self.context.aq_inner.aq_parent        
+
     def get_projects_folder(self):
-        return IProjectsFolder(self.context.aq_inner.aq_parent)
+        return IProjectsFolder(self._projects_folder)
 
     def get_featured_projects(self):
         return self.context.Schema()['featured_projects'].get(self.context)
+
+
+class ProjectsFolderTopic(ProjectsTopic):
+    
+    @property
+    def _projects_folder(self):
+        return self.context
 
 
 class ExLinesField(ExtensionField, atapi.LinesField):

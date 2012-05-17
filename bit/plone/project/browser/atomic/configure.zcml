@@ -6,7 +6,18 @@
            >
 
   <include package="bit.plone.atomic" />
-  
+
+  <adapter 
+     provides="bit.plone.atomic.interfaces.IPageLayout"
+     factory=".projects_folder_atoms.ProjectsFolderPageLayout"
+     />    
+  <adapter 
+      factory=".projects_folder_atoms.ProjectsFolderAtomicRetriever"
+      provides="plone.portlets.interfaces.IPortletRetriever"
+      />    
+  <adapter 
+      factory=".projects_folder_atoms.projectsFolderAssignmentMappingAdapter" />  
+
   <adapter 
      provides="bit.plone.atomic.interfaces.IPageLayout"
      factory=".project_info_atoms.ProjectInfoPageLayout"

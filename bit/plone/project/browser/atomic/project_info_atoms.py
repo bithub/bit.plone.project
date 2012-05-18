@@ -143,6 +143,8 @@ class ProjectInfoAtoms(FixedAtoms):
                     itemShowDescription=True,
                     itemShowDownloadLink=True))
 
+    @property
+    def _bottom(self):
         partners = self.project.get_project_folder('partners')
         if partners and partners.contentIds():
             yield self.atomic(

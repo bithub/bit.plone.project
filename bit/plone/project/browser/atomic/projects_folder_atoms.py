@@ -125,6 +125,19 @@ class ProjectsFolderAtoms(FixedAtoms):
     def _right(self):
         projects = IProjectsFolder(self.context)
         topics = projects.get_projects_topics()
+
+        yield self.atomic(
+            'site-contacts',
+            fraglet(fragletPath="/about/contact",
+                    fragletShowTitle=True,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    itemShowDescription=False,
+                    listingMaxItems=4,
+                    ))
+
+
         yield self.atomic(
             'project-topics',
             multi_fraglet(
@@ -136,7 +149,7 @@ class ProjectsFolderAtoms(FixedAtoms):
                            fragletShowThumbnail=False,
                            fragletCssClass='tall-box',
                            listingBatchResults=True,
-                           listingItemsPerPage=10,
+                           listingItemsPerPage=5,
                            itemShowTitle=True,
                            itemShowIcon=True,
                            itemShowGraphic='tile',
@@ -157,7 +170,7 @@ class ProjectsFolderAtoms(FixedAtoms):
                            fragletShowDescription=False,
                            fragletShowSummary=False,
                            fragletShowThumbnail=False,
-                           fragletCssClass='tall-box',
+                           fragletCssClass='tall-box overlayFragletItems',
                            listingBatchResults=True,
                            listingItemsPerPage=5,
                            itemShowTitle=True,

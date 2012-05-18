@@ -72,7 +72,7 @@ class ProjectsTopicAtoms(FixedAtoms):
                            fragletShowThumbnail=False,
                            fragletCssClass='tall-box',
                            listingBatchResults=True,
-                           listingItemsPerPage=10,
+                           listingItemsPerPage=7,
                            itemShowTitle=True,
                            itemShowIcon=True,
                            itemShowGraphic='tile',
@@ -109,7 +109,8 @@ class ProjectsTopicAtoms(FixedAtoms):
                         itemShowDescription=True,
                         itemShowGraphic='mini',
                         listingMaxItems=0,
-                        listingBatchItems=3))
+                        listingBatchItems=True,
+                        listingItemsPerPage=3))
         else:
             projects = IProjectsTopic(self.context).get_projects_folder()
             for project in featured_projects:

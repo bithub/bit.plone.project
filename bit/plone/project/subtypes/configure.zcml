@@ -64,6 +64,12 @@
      factory=".projects.ProjectEventsSubtype"
      />
 
+
+  <adapter 
+      for=".interfaces.IProjectEventsSubtype"
+      factory=".projects.ProjectEvents"
+     />
+
   <utility
      name="bit.plone.project.ProjectLinks"
      factory=".projects.ProjectLinksSubtype"
@@ -81,6 +87,7 @@
       />
 
 
+
   <utility
      name="bit.plone.project.ProjectPartners"
      factory=".projects.ProjectPartnersSubtype"
@@ -96,6 +103,19 @@
      name="bit.plone.project.ProjectNews"
      factory=".projects.ProjectNewsSubtype"
      />
+
+  <adapter 
+      for=".interfaces.IProjectNewsSubtype"
+      factory=".projects.ProjectNews"
+     />
+
+
+  <adapter
+      for="bit.plone.project.subtypes.interfaces.IProjectNewsSubtype"
+      provides="bit.plone.fraglets.interfaces.IFragletResultsDelegation"
+      factory=".projects.ProjectNewsResultsDelegation"
+      />
+
 
   <utility
      name="bit.plone.project.ProjectInfo"

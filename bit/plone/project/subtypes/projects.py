@@ -344,8 +344,24 @@ class ProjectNews(object):
     def __init__(self, context):
         self.context = context
 
-    def get_news(self):
-        pass
+    def get_news(self, **kwa):
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        content_filter = {}
+        content_filter['path'] = dict(
+            query=self.get_path(),
+            depth=-1)
+        content_filter['portal_type'] = 'News Item'
+        content_filter['sort_on'] = 'effective'
+        content_filter['sort_order'] = 'descending'
+        max_items = kwa.get('max_items')
+        if int(max_items or 0) == -1:
+            return []
+        return IFolderResults(self.context).get_results(
+            contentFilter=content_filter,
+            **kwa)
+
+    def get_path(self):
+        return '/'.join(self.context.getPhysicalPath())
 
 
 class ProjectEvents(object):
@@ -372,6 +388,7 @@ class ProjectLinks(object):
             depth=-1)
         content_filter['portal_type'] = 'Link'
         content_filter['sort_on'] = 'effective'
+        kwa['sort_on'] = 'effective'
         max_items = kwa.get('max_items')
         if int(max_items or 0) == -1:
             return []
@@ -554,3 +571,12 @@ class ProjectLinksResultsDelegation(object):
 
     def getResults(self, **kwa):
         return IProjectLinks(self.context).get_links(**kwa)
+
+
+class ProjectNewsResultsDelegation(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def getResults(self, **kwa):
+        return IProjectNews(self.context).get_news(**kwa)

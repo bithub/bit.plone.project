@@ -21,7 +21,8 @@ from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
 
 from bit.plone.atomic.adapters import PageLayout
 
-from bit.plone.project.interfaces import IProject
+from bit.plone.project.interfaces\
+    import IProject, IProjectNews, IProjectEvents, IProjectLinks
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
 from bit.plone.project.browser.portlets import portlet_project_contacts
 
@@ -102,25 +103,37 @@ class ProjectInfoAtoms(FixedAtoms):
                     frag_paths.append(folder)
             else:
                 break
+        
+        mf = []
+        for path in frag_paths:
+            news = IProjectNews(self.project.get_project_folder(path), None)
+            links = IProjectLinks(self.project.get_project_folder(path), None)
+            events = IProjectEvents(self.project.get_project_folder(path), None)        
+            fraglet_dict = dict(fragletPath=self._project_path(path),
+                                fragletShowTitle=True,
+                                fragletShowDescription=False,
+                                fragletShowSummary=False,
+                                fragletShowThumbnail=False,
+                                fragletCssClass='overlayFragletItems medium-tall-box',
+                                listingBatchResults=True,
+                                listingItemsPerPage=5,
+                                itemShowTitle=True,
+                                itemShowIcon=True,
+                                itemShowGraphic='tile',
+                                itemShowSummary=False,
+                                itemShowDescription=True,
+                                itemShowDownloadLink=True)            
+            if events:
+                fraglet_dict['itemProperties'] = 'timespan\nlongdate'
+            if news:
+                fraglet_dict['itemProperties'] =\
+                    'effective: Published: $PROP\nCreator: by $PROP'
+            mf.append((path, fraglet_dict))
+
         yield self.atomic(
             'project-info',
-            multi_fraglet(
-                    [(frag,
-                      dict(fragletPath=self._project_path(frag),
-                           fragletShowTitle=True,
-                           fragletShowDescription=False,
-                           fragletShowSummary=False,
-                           fragletShowThumbnail=False,
-                           fragletCssClass='overlayFragletItems medium-tall-box',
-                           listingBatchResults=True,
-                           listingItemsPerPage=5,
-                           itemShowTitle=True,
-                           itemShowIcon=True,
-                           itemShowGraphic='tile',
-                           itemShowSummary=False,
-                           itemShowDescription=True,
-                           itemShowDownloadLink=True))
-                     for frag in frag_paths]))
+            multi_fraglet(mf))
+
 
         media = self.project.get_project_folder('media')
         if media and media.contentIds():

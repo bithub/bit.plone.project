@@ -1,0 +1,67 @@
+<tal:block xmlns:tal="http://xml.zope.org/namespaces/tal"
+	   xmlns:metal="http://xml.zope.org/namespaces/metal"
+	   i18n:domain="plone">
+  <tal:is condition="view/showPortlet">
+
+    <dl tal:attributes="id view/get_id;
+			class view/get_class;"
+	tal:define="project view/project;
+		    info    project/info">
+      <dd class="project-info-content">
+	<dl class="enableFormTabbing">
+	  <dt class="fieldsetlegend-project-info">
+	    Project info
+	  </dt>
+	  <dd class="fieldset-project-info">
+	    <div class="project-info">
+	      <div tal:content="info/email" class="email" />
+	      <div tal:content="info/phone" class="phone" />
+	    </div>
+	    <div class="project-urls">
+	      <ul>
+		<tal:loop repeat="link info/links">
+		  <li class="url">
+		    <a tal:attributes="href link"
+		       tal:content="link" />
+		  </li>
+		</tal:loop>
+	      </ul>
+	    </div>
+	    <tal:if condition="view/status">
+	      <div class="status">
+		<span tal:content="view/status" />
+	      </div>
+	    </tal:if>
+	  </dd>
+	  <tal:if condition="info/contacts">
+	    <dt class="fieldsetlegend-project-people">
+	      People
+	    </dt>
+	    <dd class="fieldset-project-people">
+	      <div class="project-contacts">
+		<ul>
+		  <tal:loop repeat="contact info/contacts">
+		    <li tal:content="contact" class="person" />
+		  </tal:loop>
+		</ul>
+	      </div>
+	    </dd>
+	  </tal:if>
+	  <tal:if condition="info/address">
+	    <dt class="fieldsetlegend-project-address">
+	      Address
+	    </dt>
+	    <dd class="fieldset-project-address">
+	      <div class="project-address">
+		<tal:loop repeat="line python:view.project.info.address.split('\n')">
+		  <div tal:content="line" class="person" />
+		</tal:loop>
+	      </div>
+	    </dd>
+	  </tal:if>
+	</dl>
+      </dd>
+    </dl>
+    <div class="visualClear"><!--is that clear?--></div>
+  </tal:is>
+</tal:block>

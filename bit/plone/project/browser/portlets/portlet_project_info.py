@@ -5,63 +5,51 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.memoize.compress import xhtml_compress
 from plone.app.portlets.portlets import base
 
-from bit.plone.project.interfaces import IProjectContacts, IProject
+from bit.plone.project.interfaces import IProject
 from bit.plone.project.browser.interfaces import\
-    IProjectContactsPortlet, IProjectContactsPortletRenderer
+    IProjectInfoPortlet, IProjectInfoPortletRenderer
 
 
 class Assignment(base.Assignment):
-    implements(IProjectContactsPortlet)
+    implements(IProjectInfoPortlet)
     title = u'Archive Entry Preview'
+
+    def __init__(self, path):
+        self.path = path
 
 
 class Renderer(base.Renderer):
-    implements(IProjectContactsPortletRenderer)
-    _template = ViewPageTemplateFile('project_contacts.pt')
+    implements(IProjectInfoPortletRenderer)
+    _template = ViewPageTemplateFile('project_info.pt')
 
     def __init__(self, context, request, view, manager, data):
         base.Renderer.__init__(self, context, request, view, manager, data)
         self.updated = False
 
     @property
-    def project_contacts(self):
-        return IProjectContacts(self.context.aq_inner.aq_parent)
-
-    @property
     def project(self):
-        return IProject(self.context.aq_inner.aq_parent)
+        path = self.data.path
+        if path.startswith('/'):
+            target = self.context.portal_url.getPortalObject(
+                ).restrictedTraverse(self.data.path[1:])
+        else:
+            target = self.context.restrictedTraverse(self.data.path)
+        return IProject(target, None)
 
     def showPortlet(self):
-        return True
+        return self.project and True or False
 
-    def get_status(self):
-        status = self.project.get_project_status()
+    def status(self):
+        status = self.project.status
+        # this is a dirty hack...
         STATUS = dict(
             complete='This project is not currently running, '
             + 'but please contact us if you would like to see it happen again',
             occasional='This project is not currently running, '
             + 'but drop us an email and we\'ll let you know next time it is')
-        
         if status in STATUS:
             return STATUS[status]
-
-    def get_url(self):
-        return self.project_contacts.get_project_url()
-
-    def get_email(self):
-        return self.project_contacts.get_project_email()
-
-    def get_phone(self):
-        return self.project_contacts.get_project_phone()
-
-    def get_contacts(self):
-        return self.project_contacts.get_project_contacts()
-
-    def get_address(self):
-        return self.project_contacts.get_project_address()
-
-    def get_links(self):
-        return self.project_contacts.get_project_links()
+        return ''
 
     def get_id(self):
         return ''
@@ -70,14 +58,14 @@ class Renderer(base.Renderer):
         return ''
 
     def get_title(self):
-        return self.project.get_title()
+        return self.project.title
 
     def render(self):
         return xhtml_compress(self._template())
 
 
 class AddForm(base.AddForm):
-    form_fields = form.Fields(IProjectContactsPortlet)
+    form_fields = form.Fields(IProjectInfoPortlet)
     label = u"Add Archive Entry Preview Portlet"
     description = "An archive entry preview portlet."
 

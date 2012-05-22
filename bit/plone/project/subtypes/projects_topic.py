@@ -4,7 +4,6 @@ from zope.interface import implements
 from archetypes.schemaextender.interfaces import ISchemaExtender
 from archetypes.schemaextender.field import ExtensionField
 
-from Products.CMFCore.utils import getToolByName
 from Products.Archetypes import public as atapi
 
 from p4a.subtyper import interfaces as stifaces
@@ -27,7 +26,7 @@ class ProjectsTopic(object):
 
     @property
     def _projects_folder(self):
-        return self.context.aq_inner.aq_parent        
+        return self.context.aq_inner.aq_parent
 
     def get_projects_folder(self):
         return IProjectsFolder(self._projects_folder)
@@ -37,7 +36,7 @@ class ProjectsTopic(object):
 
 
 class ProjectsFolderTopic(ProjectsTopic):
-    
+
     @property
     def _projects_folder(self):
         return self.context

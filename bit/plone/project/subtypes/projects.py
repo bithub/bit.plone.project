@@ -16,9 +16,9 @@ from bit.plone.project.interfaces\
     IProjectNews, IProjectLinks, IProjectEvents, IProjectMedia,\
     IProjectPartners
 from bit.plone.project.subtypes.interfaces\
-    import IProjectSubtype, IProjectContactsSubtype, IProjectInfoSubtype,\
+    import IProjectSubtype,\
     IProjectNewsSubtype, IProjectLinksSubtype,\
-    IProjectEventsSubtype, IProjectMediaSubtype, IProjectPartnersSubtype
+    IProjectEventsSubtype, IProjectPartnersSubtype
 
 
 class ExStringField(ExtensionField, atapi.StringField):
@@ -34,54 +34,6 @@ class ExLinesField(ExtensionField, atapi.LinesField):
 
 project_fields = [
     ExStringField(
-        "project_email",
-        default='',
-        mode='rw',
-        read_permission='zope.View',
-        write_permission='cmf.ModifyPortalContent',
-        widget=atapi.StringWidget(
-            label='Project Email',
-            label_msgid='label_project_email',
-            description="Please enter the primary "\
-                + "contact email for this project",
-            description_msgid='help_project_email',
-            i18n_domain='plone',
-            ),
-        ),
-    ExTextField(
-        "project_address",
-        default='',
-        mode='rw',
-        read_permission='zope.View',
-        write_permission='cmf.ModifyPortalContent',
-        default_content_type='text/plain',
-        default_output_type='text/plain',
-        allowable_content_types=('text/plain'),
-        widget=atapi.TextAreaWidget(
-            label='Project Address',
-            label_msgid='label_project_address',
-            description="Please enter the primary "\
-                + "contact address for this project",
-            description_msgid='help_project_address',
-            i18n_domain='plone',
-            ),
-        ),
-    ExStringField(
-        "project_url",
-        default='',
-        mode='rw',
-        read_permission='zope.View',
-        write_permission='cmf.ModifyPortalContent',
-        widget=atapi.StringWidget(
-            label='Project URL',
-            label_msgid='label_project_url',
-            description="Please enter the primary "\
-                + "URL for this project, leave blank to use this URL",
-            description_msgid='help_project_url',
-            i18n_domain='plone',
-            ),
-        ),
-    ExStringField(
         "project_status",
         default='active',
         mode='rw',
@@ -94,21 +46,6 @@ project_fields = [
             description="Please enter the primary "\
                 + "STATUS for this project, leave blank to use this STATUS",
             description_msgid='help_project_status',
-            i18n_domain='plone',
-            ),
-        ),
-    ExStringField(
-        "project_phone",
-        default='',
-        mode='rw',
-        read_permission='zope.View',
-        write_permission='cmf.ModifyPortalContent',
-        widget=atapi.StringWidget(
-            label='Project phone',
-            label_msgid='label_project_phone',
-            description="Please enter the primary "\
-                + "phone for this project, leave blank to use this phone",
-            description_msgid='help_project_phone',
             i18n_domain='plone',
             ),
         ),
@@ -127,21 +64,6 @@ project_fields = [
             i18n_domain='plone',
             ),
         ),
-    ExLinesField(
-        "project_contacts",
-        default='',
-        mode='rw',
-        read_permission='zope.View',
-        write_permission='cmf.ModifyPortalContent',
-        widget=atapi.LinesWidget(
-            label='Project Contacts',
-            label_msgid='label_project_contacts',
-            description="Please enter the user ids "\
-                + "of the contacts for this project",
-            description_msgid='help_project_contacts',
-            i18n_domain='plone',
-            ),
-        )
     ]
 
 
@@ -162,8 +84,25 @@ class Project(object):
     def __init__(self, context):
         self.context = context
 
+    def __eq__(self, other):
+        if self.context == other.context:
+            return True
+        return False
+
+    def get_uid(self):
+        return self.context.UID()
+    uid = property(get_uid)
+
+    def get_id(self):
+        return self.context.getId()
+    id = property(get_id)
+
     def get_title(self):
         return self.context.Title()
+
+    def set_title(self, title):
+        return self.context.setTitle(title)
+    title = property(get_title, set_title)
 
     def get_project_folder(self, folderid):
         if hasattr(self.context, folderid):
@@ -204,8 +143,22 @@ class Project(object):
             )['project_status'].get(self.context)
         return project_status
 
+    def set_project_status(self, status):
+        self.context.Schema(
+            )['project_status'].set(self.context, status)
+    status = property(get_project_status, set_project_status)
+
     def get_path(self):
         return '/'.join(self.context.getPhysicalPath())
+    path = property(get_path)
+
+    def get_info(self):
+        return IProjectInfo(self.context)
+    info = property(get_info)
+
+    def get_media(self):
+        return IProjectMedia(self.context)
+    media = property(get_media)
 
     def add_contacts_folder(self):
         if not 'contacts' in self.context:
@@ -278,66 +231,6 @@ class Project(object):
         self.context['media'].setTitle('Media')
 
 
-class ProjectContacts(object):
-    implements(IProjectContacts)
-
-    def __init__(self, context):
-        self.context = context
-
-    def get_project_email(self):
-        return self.context.Schema()['project_email'].get(self.context)
-
-    def get_project_phone(self):
-        return self.context.Schema()['project_phone'].get(self.context)
-
-    def get_project_url(self):
-        project_url = self.context.Schema(
-            )['project_url'].get(self.context)
-        return project_url or self.context.absolute_url()
-
-    def get_project_address(self):
-        project_address = self.context.Schema(
-            )['project_address'].get(self.context)
-        return project_address
-
-    def get_project_contacts(self):
-        contacts = []
-        membership = getToolByName(self.context, 'portal_membership')
-
-        # this is trinity specific...
-        for member in self.context.Schema(
-            )['project_contacts'].get(self.context):
-            name = membership.getMemberById(member).getFullname()
-            contacts.append('%s <%s@3ca.org.uk>' % (name, member))
-
-        if 'contacts' in self.context:
-            contacts += ['%s <%s>' % (x.Title, x.getRemoteUrl()) for x
-                         in self.context['contacts'].contentValues()
-                         if x.portal_type == 'Link'
-                         and not x.getRemoteUrl().startswith('http://')
-                         and not x.getRemoteUrl().startswith('https://')
-                         and '@' in x.getRemoteUrl()]
-        return contacts
-
-    def get_project_links(self):
-        links = [x.getRemoteUrl() for x
-                 in self.context['contacts'].contentValues()
-                 if x.portal_type == 'Link'
-                 and x.getRemoteUrl().startswith('http://')
-                 or x.getRemoteUrl().startswith('https://')]
-        return links
-
-
-class ProjectMedia(object):
-    implements(IProjectMedia)
-
-    def get_project_galleries(self):
-        pass
-
-    def get_project_video(self):
-        pass
-
-
 class ProjectNews(object):
     implements(IProjectNews)
 
@@ -345,7 +238,6 @@ class ProjectNews(object):
         self.context = context
 
     def get_news(self, **kwa):
-        portal_catalog = getToolByName(self.context, 'portal_catalog')
         content_filter = {}
         content_filter['path'] = dict(
             query=self.get_path(),
@@ -381,7 +273,6 @@ class ProjectLinks(object):
         self.context = context
 
     def get_links(self, **kwa):
-        portal_catalog = getToolByName(self.context, 'portal_catalog')
         content_filter = {}
         content_filter['path'] = dict(
             query=self.get_path(),
@@ -399,6 +290,7 @@ class ProjectLinks(object):
     def get_path(self):
         return '/'.join(self.context.getPhysicalPath())
 
+
 class ProjectPartners(object):
     implements(IProjectPartners)
 
@@ -406,26 +298,6 @@ class ProjectPartners(object):
         self.context = context
 
     def get_partners(self):
-        pass
-
-
-class ProjectMedia(object):
-    implements(IProjectMedia)
-
-    def __init__(self, context):
-        self.context = context
-
-    def get_media(self):
-        pass
-
-
-class ProjectInfo(object):
-    implements(IProjectInfo)
-
-    def __init__(self, context):
-        self.context = context
-
-    def get_info(self):
         pass
 
 
@@ -443,23 +315,6 @@ class ProjectSubtype(object):
     icon = 'trinity-favicon-tiny.png'
     default_view = 'info'
     permission = 'bit.plone.project.AddProject'
-
-
-class ProjectContactsSubtype(object):
-    """A descriptor for the ultra doc subtype.
-    >>> descriptor = UltraDocDescriptor()
-    >>> descriptor.title
-    u'Project'
-    """
-    interface.implements(stifaces.IPortalTypedFolderishDescriptor)
-    title = u'Project contacts'
-    description = u'Project contacts, URLs etc'
-    type_interface = IProjectContactsSubtype
-    for_portal_type = 'Folder'
-    icon = 'trinity-favicon-tiny.png'
-    default_view = '@@atomic-view'
-    allowed_types = ['Link']
-    permission = 'bit.plone.project.AddProjectContacts'
 
 
 class ProjectNewsSubtype(object):
@@ -528,40 +383,6 @@ class ProjectPartnersSubtype(object):
     default_view = '@@atomic-view'
     allowed_types = ['Link']
     permission = 'bit.plone.project.AddProjectPartners'
-
-
-class ProjectInfoSubtype(object):
-    """A descriptor for the ultra doc subtype.
-    >>> descriptor = UltraDocDescriptor()
-    >>> descriptor.title
-    u'Project'
-    """
-    interface.implements(stifaces.IPortalTypedFolderishDescriptor)
-    title = u'Project info'
-    description = u'Project info, URLs etc'
-    type_interface = IProjectInfoSubtype
-    for_portal_type = 'Folder'
-    icon = 'trinity-favicon-tiny.png'
-    default_view = '@@atomic-view'
-    allowed_types = ['Link']
-    permission = 'bit.plone.project.AddProjectInfo'
-
-
-class ProjectMediaSubtype(object):
-    """A descriptor for the ultra doc subtype.
-    >>> descriptor = UltraDocDescriptor()
-    >>> descriptor.title
-    u'Project'
-    """
-    interface.implements(stifaces.IPortalTypedFolderishDescriptor)
-    title = u'Project media'
-    description = u'Project media, URLs etc'
-    type_interface = IProjectMediaSubtype
-    for_portal_type = 'Folder'
-    icon = 'trinity-favicon-tiny.png'
-    default_view = '@@atomic-view'
-    allowed_types = ['Link']
-    permission = 'bit.plone.project.AddProjectMedia'
 
 
 class ProjectLinksResultsDelegation(object):

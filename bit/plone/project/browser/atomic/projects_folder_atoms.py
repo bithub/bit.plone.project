@@ -1,4 +1,3 @@
-import os
 
 from zope.interface import implements, implementer
 from zope.component import adapts, adapter
@@ -116,10 +115,9 @@ class ProjectsFolderAtoms(FixedAtoms):
                     itemShowTitle=True,
                     itemShowIcon=False,
                     itemShowSummary=False,
-                    itemShowDescription=True, 
+                    itemShowDescription=True,
                     itemShowGraphic='tile',
                     listingBatchResults=False))
-
 
     @property
     def _right(self):
@@ -136,7 +134,6 @@ class ProjectsFolderAtoms(FixedAtoms):
                     itemShowDescription=False,
                     listingMaxItems=4,
                     ))
-
 
         yield self.atomic(
             'project-topics',
@@ -180,7 +177,7 @@ class ProjectsFolderAtoms(FixedAtoms):
                            itemShowDescription=True,
                            itemShowDownloadLink=True))
                      for path in ['/about/news/latest',
-                                  '/events/upcoming',]]))
+                                  '/events/upcoming', ]]))
 
     @property
     def _bottom(self):
@@ -194,7 +191,7 @@ class ProjectsFolderAtoms(FixedAtoms):
                     fragletCssClass='floatedBoxes',
                     itemShowTitle=False,
                     itemShowSummary=False,
-                    itemShowDescription=False, 
+                    itemShowDescription=False,
                     itemShowGraphic='tile',
                     listingBatchResults=False))
 

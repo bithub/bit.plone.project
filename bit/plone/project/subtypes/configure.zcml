@@ -49,16 +49,6 @@
       for=".interfaces.IProjectSubtype"
       />
 
-  <adapter
-      factory=".projects.ProjectContacts"
-      for=".interfaces.IProjectSubtype"
-      />
-
-  <utility
-     name="bit.plone.project.ProjectContacts"
-     factory=".projects.ProjectContactsSubtype"
-     />
-
   <utility
      name="bit.plone.project.ProjectEvents"
      factory=".projects.ProjectEventsSubtype"
@@ -93,11 +83,6 @@
      factory=".projects.ProjectPartnersSubtype"
      />
 
-  <utility
-     name="bit.plone.project.ProjectMedia"
-     factory=".projects.ProjectMediaSubtype"
-     />
-
 
   <utility
      name="bit.plone.project.ProjectNews"
@@ -118,11 +103,6 @@
 
 
   <utility
-     name="bit.plone.project.ProjectInfo"
-     factory=".projects.ProjectInfoSubtype"
-     />
-
-  <utility
      name="bit.plone.project.ProjectsFolder"
      factory=".projects_folder.ProjectsFolderSubtype"
      />
@@ -136,6 +116,31 @@
       for=".interfaces.IProjectsFolderSubtype"
       factory=".projects_folder.ProjectsFolderExtender"
      />
+
+  <utility
+     name="bit.plone.project.ProjectInfo"
+     factory=".project_info.ProjectInfoSubtype"
+     />
+
+  <adapter
+      factory=".project_info.ProjectInfo"
+      for=".interfaces.IProjectSubtype"
+      />
+
+  <adapter 
+      for=".interfaces.IProjectInfoSubtype"
+      factory=".project_info.ProjectInfoExtender"
+     />
+
+  <utility
+     name="bit.plone.project.ProjectMedia"
+     factory=".project_media.ProjectMediaSubtype"
+     />
+
+  <adapter
+      factory=".project_media.ProjectMedia"
+      for=".interfaces.IProjectSubtype"
+      />
 
 </configure>
 

@@ -22,9 +22,9 @@ from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
 from bit.plone.atomic.adapters import PageLayout
 
 from bit.plone.project.interfaces\
-    import IProject, IProjectNews, IProjectEvents, IProjectLinks
+    import IProject, IProjectNews, IProjectEvents
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
-from bit.plone.project.browser.portlets import portlet_project_contacts
+from bit.plone.project.browser.portlets import portlet_project_info
 
 
 class ProjectInfoPageLayout(PageLayout):
@@ -59,7 +59,7 @@ class ProjectInfoAtoms(FixedAtoms):
         return self.context.aq_inner.aq_parent
 
     def _project_path(self, path=''):
-        return '/'.join(list(
+        return '/%s' % '/'.join(list(
                 getToolByName(
                     self.context, 'portal_url'
                     ).getRelativeContentPath(
@@ -91,10 +91,10 @@ class ProjectInfoAtoms(FixedAtoms):
     @property
     def _right(self):
         yield self.atomic(
-            'project-contacts',
-            portlet_project_contacts.Assignment()
+            'project-info',
+            portlet_project_info.Assignment(path=self._project_path())
             )
-        
+
         frag_paths = []
         excluded_folders = ['partners', 'media', 'info']
         for folder in self.project.get_project_folders(non_empty=True):
@@ -103,18 +103,20 @@ class ProjectInfoAtoms(FixedAtoms):
                     frag_paths.append(folder)
             else:
                 break
-        
+
         mf = []
         for path in frag_paths:
-            news = IProjectNews(self.project.get_project_folder(path), None)
-            links = IProjectLinks(self.project.get_project_folder(path), None)
-            events = IProjectEvents(self.project.get_project_folder(path), None)        
+            news = IProjectNews(
+                self.project.get_project_folder(path), None)
+            events = IProjectEvents(
+                self.project.get_project_folder(path), None)
+            css_class = 'overlayFragletItems medium-tall-box'
             fraglet_dict = dict(fragletPath=self._project_path(path),
                                 fragletShowTitle=True,
                                 fragletShowDescription=False,
                                 fragletShowSummary=False,
                                 fragletShowThumbnail=False,
-                                fragletCssClass='overlayFragletItems medium-tall-box',
+                                fragletCssClass=css_class,
                                 listingBatchResults=True,
                                 listingItemsPerPage=5,
                                 itemShowTitle=True,
@@ -122,7 +124,7 @@ class ProjectInfoAtoms(FixedAtoms):
                                 itemShowGraphic='tile',
                                 itemShowSummary=False,
                                 itemShowDescription=True,
-                                itemShowDownloadLink=True)            
+                                itemShowDownloadLink=True)
             if events:
                 fraglet_dict['itemProperties'] = 'timespan\nlongdate'
             if news:
@@ -131,9 +133,8 @@ class ProjectInfoAtoms(FixedAtoms):
             mf.append((path, fraglet_dict))
 
         yield self.atomic(
-            'project-info',
+            'project-listings',
             multi_fraglet(mf))
-
 
         media = self.project.get_project_folder('media')
         if media and media.contentIds():

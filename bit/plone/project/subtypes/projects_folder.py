@@ -1,16 +1,18 @@
 from zope import interface
 from zope.interface import implements
+from zope.event import notify
 
 from archetypes.schemaextender.interfaces import ISchemaExtender
 from archetypes.schemaextender.field import ExtensionField
 
 from Products.CMFCore.utils import getToolByName
 from Products.Archetypes import public as atapi
+from Products.Archetypes.event import ObjectInitializedEvent
 
 from p4a.subtyper import interfaces as stifaces
 
 from bit.plone.project.interfaces\
-    import IProjectsFolder
+    import IProjectsFolder, IProject
 
 from bit.plone.project.subtypes.interfaces\
     import IProjectsFolderSubtype
@@ -44,6 +46,12 @@ class ProjectsFolder(object):
     def __init__(self, context):
         self.context = context
 
+    def add_project(self, project_id):
+        project_folder = self.context[
+            self.context.invokeFactory('Folder', project_id)]
+        notify(ObjectInitializedEvent(project_folder))
+        return IProject(project_folder)
+
     def get_featured_content(self):
         return self.context.Schema()['featured_content'].get(self.context)
 
@@ -60,6 +68,20 @@ class ProjectsFolder(object):
 
     def get_path(self):
         return '/'.join(self.context.getPhysicalPath())
+
+    def get_project(self, project_id):
+        return IProject(self.context[project_id])
+
+    def get_projects(self):
+        portal_catalog = getToolByName(self.context, 'portal_catalog')
+        project_iface =\
+            'bit.plone.project.subtypes.interfaces.IProjectSubtype'
+        return [
+            x.getId for x
+            in portal_catalog.searchResults(
+                sort_on='sortable_title',
+                object_provides=project_iface,
+                path=self.get_path())]
 
 
 class ProjectsFolderExtender(object):

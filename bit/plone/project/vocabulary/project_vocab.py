@@ -1,7 +1,6 @@
 import base64
 
 from zope.interface import implements
-from zope.component import getUtility, adapts
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
@@ -23,7 +22,5 @@ class ProjectStatusVocabulary(object):
         return SimpleVocabulary(
             [SimpleTerm(value=k, token=base64.b64encode(k), title=v)
              for k, v in statuses.items()])
-        
 
 ProjectStatusVocabularyFactory = ProjectStatusVocabulary()
-

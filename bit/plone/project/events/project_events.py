@@ -19,7 +19,6 @@ def add_project_topic(obj, event):
 
 
 def add_project_folders(obj, event):
-    IProject(obj).add_contacts_folder()
     IProject(obj).add_news_folder()
     IProject(obj).add_events_folder()
     IProject(obj).add_links_folder()

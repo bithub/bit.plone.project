@@ -57,6 +57,7 @@ class ProjectsTopicAtoms(FixedAtoms):
                     ).getRelativeContentPath(
                     self._project()
                     )) + path.split('/'))
+
     @property
     def _right(self):
         projects = IProjectsTopic(self.context).get_projects_folder()
@@ -83,7 +84,8 @@ class ProjectsTopicAtoms(FixedAtoms):
 
     @property
     def _left(self):
-        featured_projects = IProjectsTopic(self.context).get_featured_projects()
+        featured_projects = IProjectsTopic(
+            self.context).get_featured_projects()
 
         yield self.atomic(
             'project',
@@ -112,7 +114,6 @@ class ProjectsTopicAtoms(FixedAtoms):
                         listingBatchItems=True,
                         listingItemsPerPage=3))
         else:
-            projects = IProjectsTopic(self.context).get_projects_folder()
             for project in featured_projects:
                 yield self.atomic(
                     'project-%s' % project,

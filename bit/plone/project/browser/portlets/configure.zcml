@@ -8,10 +8,10 @@
     i18n_domain="bit.plone.project"
     >
   <plone:portlet
-      name="portlets.ProjectContacts"
-      interface="bit.plone.project.browser.interfaces.IProjectContactsPortlet"
-      assignment=".portlet_project_contacts.Assignment"
-      renderer=".portlet_project_contacts.Renderer"
-      addview=".portlet_project_contacts.AddForm"
+      name="portlets.ProjectInfo"
+      interface="bit.plone.project.browser.interfaces.IProjectInfoPortlet"
+      assignment=".portlet_project_info.Assignment"
+      renderer=".portlet_project_info.Renderer"
+      addview=".portlet_project_info.AddForm"
       />
 </configure>

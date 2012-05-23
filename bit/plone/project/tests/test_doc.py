@@ -1,9 +1,12 @@
 import unittest
 import doctest
-from plone.testing import layered
-from plone.app.testing import ploneSite
+
 from zope.site.hooks import setHooks
 from zope.site.hooks import  setSite
+
+from plone.testing import layered
+from plone.app.testing import ploneSite
+
 from Testing.ZopeTestCase import FunctionalDocFileSuite
 
 OPTION_FLAGS = doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE
@@ -22,7 +25,8 @@ def test_suite():
     suite.addTests([
             layered(
                 FunctionalDocFileSuite(
-                    '../README.rst', optionflags=OPTION_FLAGS),
+                    '../README.rst',
+                    optionflags=OPTION_FLAGS),
                 layer=PROJECT_FUNCTIONAL_TESTING),
             ])
     return suite

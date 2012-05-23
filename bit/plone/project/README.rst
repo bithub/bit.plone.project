@@ -391,6 +391,27 @@ We can access the project from the portlet
   >>> renderer.project == project1
   True
 
+Subtype permissions
+-------------------
+
+  >>> from zope.security import checkPermission
+  >>> subtypes = [x.name for x in subtyper.possible_types(projects_folder)
+  ...             if checkPermission(
+  ...		     x.descriptor.permission, projects_folder)]
+
+  >>> 'bit.plone.project.Project' in subtypes
+  False
+
+  >>> 'bit.plone.project.ProjectInfo' in subtypes
+  False
+
+  >>> 'bit.plone.project.ProjectMedia' in subtypes
+  False
+
+  >>> subtypes
+  [u'bit.plone.project.ProjectsFolder']
+
+
 
 
 

@@ -5,6 +5,8 @@ from plone.app.testing import PloneSandboxLayer, IntegrationTesting
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import setRoles, applyProfile
 
+from Products.Five import security
+
 
 class BitPloneProjectTestLayer(PloneSandboxLayer):
     defaultBases = (PLONE_FIXTURE,)
@@ -16,9 +18,11 @@ class BitPloneProjectTestLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'bit.plone.project:default')
         setRoles(portal, TEST_USER_ID, ['Manager'])
+        security.newInteraction()
 
     def tearDownZope(self, app):
         z2.uninstallProduct(app, 'bit.plone.project')
+
 
 PROJECT_TEST_FIXTURE = BitPloneProjectTestLayer()
 PROJECT_INTEGRATION_TESTING = IntegrationTesting(

@@ -9,10 +9,11 @@ from plone.portlets.storage import PortletAssignmentMapping
 
 from Products.CMFCore.utils import getToolByName
 
+from bit.plone.multiportlet.portlet.portlet_multi_portlet\
+    import Assignment as multi_portlet
 from bit.plone.atomic.interfaces import IAtoms
 from bit.plone.atomic.browser.forms.retriever\
     import FixedAtoms, FixedAtomicRetriever
-
 from bit.plone.fraglets.browser.portlets.portlet_fraglet\
     import Assignment as fraglet
 from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
@@ -136,48 +137,59 @@ class ProjectsFolderAtoms(FixedAtoms):
                     ))
 
         yield self.atomic(
-            'project-topics',
-            multi_fraglet(
-                    [(topic,
-                      dict(fragletPath=self._project_path(topic),
-                           fragletShowTitle=True,
-                           fragletShowDescription=False,
-                           fragletShowSummary=False,
-                           fragletShowThumbnail=False,
-                           fragletCssClass='tall-box',
-                           listingBatchResults=True,
-                           listingItemsPerPage=5,
-                           itemShowTitle=True,
-                           itemShowIcon=True,
-                           itemShowGraphic='tile',
-                           itemShowSummary=False,
-                           itemShowDescription=True,
-                           itemShowDownloadLink=True))
-                     for topic in topics]))
+            'topics',
+            multi_portlet(dict(portlets=topics,
+                               portlet_type='tabbed')))
+
+        for topic in topics:
+            yield self.atomic(
+                topic,
+                fraglet(
+                    fragletPath=self._project_path(topic),
+                    fragletShowTitle=True,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    fragletCssClass='tall-box',
+                    listingBatchResults=True,
+                    listingItemsPerPage=5,
+                    itemShowTitle=True,
+                    itemShowIcon=True,
+                    itemShowGraphic='tile',
+                    itemShowSummary=False,
+                    itemShowDescription=True,
+                    itemShowDownloadLink=True),
+                hidden=True)
 
         # this needs cleaning up and moving!
         names = {'/events/upcoming': 'Events',
                  '/about/news/latest': 'News'}
+
         yield self.atomic(
-            'site-news',
-            multi_fraglet(
-                    [(names[path],
-                      dict(fragletPath=path,
-                           fragletShowTitle=False,
-                           fragletShowDescription=False,
-                           fragletShowSummary=False,
-                           fragletShowThumbnail=False,
-                           fragletCssClass='tall-box overlayFragletItems',
-                           listingBatchResults=True,
-                           listingItemsPerPage=5,
-                           itemShowTitle=True,
-                           itemShowIcon=True,
-                           itemShowGraphic='tile',
-                           itemShowSummary=False,
-                           itemShowDescription=True,
-                           itemShowDownloadLink=True))
-                     for path in ['/about/news/latest',
-                                  '/events/upcoming', ]]))
+            'latest',
+            multi_portlet(dict(portlets=names.values(),
+                               portlet_type='tabbed')))
+        
+        for path in ['/about/news/latest',
+                     '/events/upcoming',]:
+            yield self.atomic(
+                names[path],
+                fraglet(
+                    fragletPath=path,
+                    fragletShowTitle=False,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    fragletCssClass='tall-box overlayFragletItems',
+                    listingBatchResults=True,
+                    listingItemsPerPage=5,
+                    itemShowTitle=True,
+                    itemShowIcon=True,
+                    itemShowGraphic='tile',
+                    itemShowSummary=False,
+                    itemShowDescription=True,
+                    itemShowDownloadLink=True),
+                hidden=True)
 
     @property
     def _bottom(self):

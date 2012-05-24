@@ -16,11 +16,7 @@ from bit.plone.atomic.browser.forms.retriever\
     import FixedAtoms, FixedAtomicRetriever
 from bit.plone.fraglets.browser.portlets.portlet_fraglet\
     import Assignment as fraglet
-from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
-    import Assignment as multi_fraglet
-
 from bit.plone.atomic.adapters import PageLayout
-
 from bit.plone.project.interfaces import IProject, IProjectsFolder
 from bit.plone.project.subtypes.interfaces import IProjectsFolderSubtype
 

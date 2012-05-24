@@ -13,14 +13,11 @@ from Products.CMFCore.utils import getToolByName
 from bit.plone.atomic.interfaces import IAtoms
 from bit.plone.atomic.browser.forms.retriever\
     import FixedAtoms, FixedAtomicRetriever
-
 from bit.plone.fraglets.browser.portlets.portlet_fraglet\
     import Assignment as fraglet
-from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
-    import Assignment as multi_fraglet
-
 from bit.plone.atomic.adapters import PageLayout
-
+from bit.plone.multiportlet.portlet.portlet_multi_portlet\
+    import Assignment as multi_portlet
 from bit.plone.project.interfaces\
     import IProject, IProjectNews, IProjectEvents
 from bit.plone.project.subtypes.interfaces import IProjectInfoSubtype
@@ -105,6 +102,7 @@ class ProjectInfoAtoms(FixedAtoms):
                 break
 
         mf = []
+        subs = []
         for path in frag_paths:
             news = IProjectNews(
                 self.project.get_project_folder(path), None)
@@ -125,16 +123,23 @@ class ProjectInfoAtoms(FixedAtoms):
                                 itemShowSummary=False,
                                 itemShowDescription=True,
                                 itemShowDownloadLink=True)
+            
             if events:
                 fraglet_dict['itemProperties'] = 'timespan\nlongdate'
             if news:
                 fraglet_dict['itemProperties'] =\
                     'effective: Published: $PROP\nCreator: by $PROP'
-            mf.append((path, fraglet_dict))
-
+            subportlet = path.split('/')[-1]
+            subs.append(subportlet)
+            yield self.atomic(
+                subportlet,
+                fraglet(**fraglet_dict),
+                hidden=True
+                )
         yield self.atomic(
             'project-listings',
-            multi_fraglet(mf))
+            multi_portlet(dict(portlets=subs,
+                               portlet_type='tabbed')))
 
         media = self.project.get_project_folder('media')
         if media and media.contentIds():

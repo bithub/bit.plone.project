@@ -14,11 +14,9 @@ from bit.plone.atomic.browser.forms.retriever\
 
 from bit.plone.fraglets.browser.portlets.portlet_fraglet\
     import Assignment as fraglet
-from bit.plone.fraglets.browser.portlets.portlet_multi_fraglet\
-    import Assignment as multi_fraglet
-
+from bit.plone.multiportlet.portlet.portlet_multi_portlet\
+    import Assignment as multi_portlet
 from bit.plone.atomic.adapters import PageLayout
-
 from bit.plone.project.interfaces import IProjectsTopic
 from bit.plone.project.subtypes.interfaces import IProjectsTopicSubtype
 
@@ -62,25 +60,30 @@ class ProjectsTopicAtoms(FixedAtoms):
     def _right(self):
         projects = IProjectsTopic(self.context).get_projects_folder()
         topics = projects.get_projects_topics()
+        for topic in topics:
+            yield self.atomic(
+                topic,
+                fraglet(
+                    fragletPath=self._project_path(topic),
+                    fragletShowTitle=False,
+                    fragletShowDescription=False,
+                    fragletShowSummary=False,
+                    fragletShowThumbnail=False,
+                    fragletCssClass='tall-box',
+                    listingBatchResults=True,
+                    listingItemsPerPage=7,
+                    itemShowTitle=True,
+                    itemShowIcon=True,
+                    itemShowGraphic='tile',
+                    itemShowSummary=False,
+                    itemShowDescription=True,
+                    itemShowDownloadLink=True),
+                hidden=True)
         yield self.atomic(
             'project-topics',
-            multi_fraglet(
-                    [(topic,
-                      dict(fragletPath=self._project_path(topic),
-                           fragletShowTitle=False,
-                           fragletShowDescription=False,
-                           fragletShowSummary=False,
-                           fragletShowThumbnail=False,
-                           fragletCssClass='tall-box',
-                           listingBatchResults=True,
-                           listingItemsPerPage=7,
-                           itemShowTitle=True,
-                           itemShowIcon=True,
-                           itemShowGraphic='tile',
-                           itemShowSummary=False,
-                           itemShowDescription=True,
-                           itemShowDownloadLink=True))
-                     for topic in topics]))
+            multi_portlet(dict(portlets=topics,
+                               portlet_type='tabbed')))
+
 
     @property
     def _left(self):
